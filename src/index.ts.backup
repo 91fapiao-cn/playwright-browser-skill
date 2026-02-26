@@ -1,0 +1,950 @@
+import { chromium, firefox, webkit, Browser, Page, BrowserContext, Dialog, Download, FileChooser, devices, Request, Response, Route } from 'playwright';
+
+export class PlaywrightBrowserSkill {
+  private browser: Browser | null = null;
+  private context: BrowserContext | null = null;
+  private page: Page | null = null;
+  private pages: Page[] = [];
+  private dialogHandler: ((dialog: Dialog) => void) | null = null;
+  private requestLogs: Array<{ url: string; method: string; timestamp: number }> = [];
+  private responseLogs: Array<{ url: string; status: number; timestamp: number }> = [];
+  private consoleLogs: Array<{ type: string; text: string; timestamp: number }> = [];
+  private eventListeners: Map<string, Function> = new Map();
+
+  // ==================== 浏览器管理 ====================
+  
+  async launch(options: {
+    browserType?: 'chromium' | 'firefox' | 'webkit';
+    headless?: boolean;
+    viewport?: { width: number; height: number };
+    userAgent?: string;
+    locale?: string;
+    timezone?: string;
+    permissions?: string[];
+    geolocation?: { latitude: number; longitude: number };
+    proxy?: { server: string; username?: string; password?: string };
+    deviceName?: string;
+    recordVideo?: boolean;
+    recordTrace?: boolean;
+    slowMo?: number;
+    args?: string[];
+  } = {}) {
+    const { browserType = 'chromium', headless = true, viewport, userAgent, locale, timezone, permissions, geolocation, proxy, deviceName, recordVideo, recordTrace, slowMo, args } = options;
+    
+    const browserEngine = browserType === 'firefox' ? firefox : 
+                          browserType === 'webkit' ? webkit : chromium;
+    
+    // 设备模拟
+    let deviceConfig = {};
+    if (deviceName && devices[deviceName]) {
+      deviceConfig = devices[deviceName];
+    }
+    
+    this.browser = await browserEngine.launch({ 
+      headless, 
+      proxy,
+      slowMo,
+      args
+    });
+    
+    this.context = await this.browser.newContext({
+      ...deviceConfig,
+      viewport: viewport || deviceConfig.viewport || { width: 1280, height: 720 },
+      userAgent: userAgent || deviceConfig.userAgent,
+      locale,
+      timezoneId: timezone,
+      permissions,
+      geolocation,
+      recordVideo: recordVideo ? { dir: './videos/' } : undefined,
+    });
+    
+    // 启用追踪
+    if (recordTrace) {
+      await this.context.tracing.start({ screenshots: true, snapshots: true });
+    }
+    
+    this.page = await this.context.newPage();
+    this.pages.push(this.page);
+    
+    // 设置事件监听
+    this.setupEventListeners();
+    
+    return { success: true, message: `${browserType} 浏览器已启动` };
+  }
+
+  async close() {
+    if (this.context) {
+      // 停止追踪
+      try {
+        await this.context.tracing.stop({ path: './trace.zip' });
+      } catch (e) {
+        // 追踪未启动
+      }
+    }
+    
+    if (this.browser) {
+      await this.browser.close();
+      this.browser = null;
+      this.context = null;
+      this.page = null;
+      this.pages = [];
+      this.requestLogs = [];
+      this.responseLogs = [];
+      this.consoleLogs = [];
+      this.eventListeners.clear();
+    }
+    return { success: true, message: '浏览器已关闭' };
+  }
+
+  async newPage() {
+    if (!this.context) throw new Error('浏览器未启动');
+    const newPage = await this.context.newPage();
+    this.pages.push(newPage);
+    this.page = newPage;
+    this.setupPageEventListeners(newPage);
+    return { success: true, message: '新页面已创建', pageIndex: this.pages.length - 1 };
+  }
+
+  async switchPage(index: number) {
+    if (!this.pages[index]) throw new Error(`页面索引 ${index} 不存在`);
+    this.page = this.pages[index];
+    return { success: true, message: `已切换到页面 ${index}` };
+  }
+
+  async closePage(index?: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const pageToClose = index !== undefined ? this.pages[index] : this.page;
+    if (!pageToClose) throw new Error('页面不存在');
+    
+    await pageToClose.close();
+    this.pages = this.pages.filter(p => p !== pageToClose);
+    
+    if (this.page === pageToClose) {
+      this.page = this.pages[0] || null;
+    }
+    
+    return { success: true, message: '页面已关闭' };
+  }
+
+  async getAllPages() {
+    return { 
+      success: true, 
+      pages: this.pages.map((p, i) => ({ 
+        index: i, 
+        url: p.url(), 
+        title: p.title() 
+      })) 
+    };
+  }
+
+  // ==================== 页面导航 ====================
+  
+  async goto(url: string, options?: { waitUntil?: 'load' | 'domcontentloaded' | 'networkidle'; timeout?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.goto(url, options);
+    return { success: true, url: this.page.url() };
+  }
+
+  async goBack() {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.goBack();
+    return { success: true, url: this.page.url() };
+  }
+
+  async goForward() {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.goForward();
+    return { success: true, url: this.page.url() };
+  }
+
+  async reload() {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.reload();
+    return { success: true, url: this.page.url() };
+  }
+
+  // ==================== 元素交互 ====================
+  
+  async click(selector: string, options?: { timeout?: number; button?: 'left' | 'right' | 'middle'; clickCount?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.click(selector, options);
+    return { success: true, selector };
+  }
+
+  async dblclick(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.dblclick(selector);
+    return { success: true, selector };
+  }
+
+  async hover(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.hover(selector);
+    return { success: true, selector };
+  }
+
+  async fill(selector: string, value: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.fill(selector, value);
+    return { success: true, selector, value };
+  }
+
+  async type(selector: string, text: string, options?: { delay?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.type(selector, text, options);
+    return { success: true, selector, text };
+  }
+
+  async press(selector: string, key: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.press(selector, key);
+    return { success: true, selector, key };
+  }
+
+  async select(selector: string, value: string | string[]) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.selectOption(selector, value);
+    return { success: true, selector, value };
+  }
+
+  async check(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.check(selector);
+    return { success: true, selector };
+  }
+
+  async uncheck(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.uncheck(selector);
+    return { success: true, selector };
+  }
+
+  async focus(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.focus(selector);
+    return { success: true, selector };
+  }
+
+  async drag(sourceSelector: string, targetSelector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.dragAndDrop(sourceSelector, targetSelector);
+    return { success: true, source: sourceSelector, target: targetSelector };
+  }
+
+  // ==================== 内容提取 ====================
+  
+  async getText(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const text = await this.page.textContent(selector);
+    return { success: true, text };
+  }
+
+  async getTitle() {
+    if (!this.page) throw new Error('浏览器未启动');
+    const title = await this.page.title();
+    return { success: true, title };
+  }
+
+  async getHTML() {
+    if (!this.page) throw new Error('浏览器未启动');
+    const html = await this.page.content();
+    return { success: true, html };
+  }
+
+  async getLinks() {
+    if (!this.page) throw new Error('浏览器未启动');
+    const links = await this.page.$$eval('a', (anchors) => 
+      anchors.map(a => ({ text: a.textContent, href: a.href }))
+    );
+    return { success: true, links };
+  }
+
+  async getAttribute(selector: string, attribute: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const value = await this.page.getAttribute(selector, attribute);
+    return { success: true, attribute, value };
+  }
+
+  async getInputValue(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const value = await this.page.inputValue(selector);
+    return { success: true, value };
+  }
+
+  async isVisible(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const visible = await this.page.isVisible(selector);
+    return { success: true, visible };
+  }
+
+  async isEnabled(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const enabled = await this.page.isEnabled(selector);
+    return { success: true, enabled };
+  }
+
+  async isChecked(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const checked = await this.page.isChecked(selector);
+    return { success: true, checked };
+  }
+
+  async count(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const count = await this.page.locator(selector).count();
+    return { success: true, count };
+  }
+
+  // ==================== 等待操作 ====================
+  
+  async waitForSelector(selector: string, options?: { timeout?: number; state?: 'attached' | 'visible' | 'hidden' }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.waitForSelector(selector, options);
+    return { success: true, selector };
+  }
+
+  async waitForNavigation(options?: { timeout?: number; waitUntil?: 'load' | 'domcontentloaded' | 'networkidle' }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.waitForLoadState(options?.waitUntil || 'load', { timeout: options?.timeout });
+    return { success: true, url: this.page.url() };
+  }
+
+  async waitForTimeout(timeout: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.waitForTimeout(timeout);
+    return { success: true, timeout };
+  }
+
+  async waitForURL(url: string | RegExp, options?: { timeout?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.waitForURL(url, options);
+    return { success: true, url: this.page.url() };
+  }
+
+  // ==================== 截图和PDF ====================
+  
+  async screenshot(options?: { path?: string; fullPage?: boolean; type?: 'png' | 'jpeg'; quality?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const screenshot = await this.page.screenshot(options);
+    return { success: true, screenshot: screenshot.toString('base64') };
+  }
+
+  async screenshotElement(selector: string, options?: { path?: string }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const element = await this.page.locator(selector);
+    const screenshot = await element.screenshot(options);
+    return { success: true, screenshot: screenshot.toString('base64') };
+  }
+
+  async pdf(options?: { path?: string; format?: string; printBackground?: boolean }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const pdf = await this.page.pdf(options);
+    return { success: true, pdf: pdf.toString('base64') };
+  }
+
+  // ==================== JavaScript执行 ====================
+  
+  async evaluate(script: string, arg?: any) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const result = await this.page.evaluate(script, arg);
+    return { success: true, result };
+  }
+
+  async evaluateHandle(script: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const handle = await this.page.evaluateHandle(script);
+    return { success: true, handle: handle.toString() };
+  }
+
+  async addScriptTag(options: { url?: string; content?: string; type?: string }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.addScriptTag(options);
+    return { success: true, message: '脚本已添加' };
+  }
+
+  async addStyleTag(options: { url?: string; content?: string }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.addStyleTag(options);
+    return { success: true, message: '样式已添加' };
+  }
+
+  // ==================== Cookie和存储 ====================
+  
+  async setCookies(cookies: Array<{ name: string; value: string; domain?: string; path?: string; expires?: number; httpOnly?: boolean; secure?: boolean; sameSite?: 'Strict' | 'Lax' | 'None' }>) {
+    if (!this.context) throw new Error('浏览器未启动');
+    await this.context.addCookies(cookies);
+    return { success: true, message: 'Cookies已设置' };
+  }
+
+  async getCookies() {
+    if (!this.context) throw new Error('浏览器未启动');
+    const cookies = await this.context.cookies();
+    return { success: true, cookies };
+  }
+
+  async clearCookies() {
+    if (!this.context) throw new Error('浏览器未启动');
+    await this.context.clearCookies();
+    return { success: true, message: 'Cookies已清除' };
+  }
+
+  async setLocalStorage(key: string, value: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.evaluate(({ k, v }) => localStorage.setItem(k, v), { k: key, v: value });
+    return { success: true, key, value };
+  }
+
+  async getLocalStorage(key?: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const result = key 
+      ? await this.page.evaluate((k) => localStorage.getItem(k), key)
+      : await this.page.evaluate(() => JSON.stringify(localStorage));
+    return { success: true, result };
+  }
+
+  async clearLocalStorage() {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.evaluate(() => localStorage.clear());
+    return { success: true, message: 'LocalStorage已清除' };
+  }
+
+  // ==================== 网络和请求 ====================
+  
+  async setExtraHTTPHeaders(headers: Record<string, string>) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.setExtraHTTPHeaders(headers);
+    return { success: true, message: 'HTTP头已设置' };
+  }
+
+  async setOffline(offline: boolean) {
+    if (!this.context) throw new Error('浏览器未启动');
+    await this.context.setOffline(offline);
+    return { success: true, offline };
+  }
+
+  async route(url: string | RegExp, handler: 'abort' | 'continue' | 'fulfill') {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.route(url, async (route) => {
+      if (handler === 'abort') await route.abort();
+      else if (handler === 'continue') await route.continue();
+      else await route.fulfill({ status: 200, body: 'Mocked' });
+    });
+    return { success: true, message: '路由已设置' };
+  }
+
+  // ==================== 对话框处理 ====================
+  
+  async handleDialog(action: 'accept' | 'dismiss', promptText?: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    this.dialogHandler = async (dialog: Dialog) => {
+      if (action === 'accept') {
+        await dialog.accept(promptText);
+      } else {
+        await dialog.dismiss();
+      }
+    };
+    this.page.on('dialog', this.dialogHandler);
+    return { success: true, message: '对话框处理器已设置' };
+  }
+
+  // ==================== 文件操作 ====================
+  
+  async uploadFile(selector: string, filePath: string | string[]) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.setInputFiles(selector, filePath);
+    return { success: true, selector, filePath };
+  }
+
+  async downloadFile(triggerSelector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      this.page.click(triggerSelector)
+    ]);
+    const path = await download.path();
+    return { success: true, path, filename: download.suggestedFilename() };
+  }
+
+  // ==================== Frame操作 ====================
+  
+  async switchToFrame(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const frame = this.page.frame({ url: selector }) || await this.page.frameLocator(selector).owner();
+    return { success: true, message: '已切换到frame' };
+  }
+
+  async getFrames() {
+    if (!this.page) throw new Error('浏览器未启动');
+    const frames = this.page.frames().map(f => ({ name: f.name(), url: f.url() }));
+    return { success: true, frames };
+  }
+
+  // ==================== 视口和设备 ====================
+  
+  async setViewportSize(width: number, height: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.setViewportSize({ width, height });
+    return { success: true, width, height };
+  }
+
+  async emulateMedia(options: { colorScheme?: 'light' | 'dark' | 'no-preference'; media?: 'screen' | 'print' }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.emulateMedia(options);
+    return { success: true, options };
+  }
+
+  // ==================== 其他工具 ====================
+  
+  async getCurrentURL() {
+    if (!this.page) throw new Error('浏览器未启动');
+    return { success: true, url: this.page.url() };
+  }
+
+  async getViewportSize() {
+    if (!this.page) throw new Error('浏览器未启动');
+    const viewport = this.page.viewportSize();
+    return { success: true, viewport };
+  }
+
+  async scrollTo(x: number, y: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.evaluate(({ x, y }) => window.scrollTo(x, y), { x, y });
+    return { success: true, x, y };
+  }
+
+  async scrollIntoView(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.locator(selector).scrollIntoViewIfNeeded();
+    return { success: true, selector };
+  }
+
+  // ==================== 事件监听 ====================
+  
+  private setupEventListeners() {
+    if (!this.page) return;
+    this.setupPageEventListeners(this.page);
+  }
+
+  private setupPageEventListeners(page: Page) {
+    // Console 日志
+    page.on('console', (msg) => {
+      this.consoleLogs.push({
+        type: msg.type(),
+        text: msg.text(),
+        timestamp: Date.now()
+      });
+    });
+
+    // 请求日志
+    page.on('request', (request: Request) => {
+      this.requestLogs.push({
+        url: request.url(),
+        method: request.method(),
+        timestamp: Date.now()
+      });
+    });
+
+    // 响应日志
+    page.on('response', (response: Response) => {
+      this.responseLogs.push({
+        url: response.url(),
+        status: response.status(),
+        timestamp: Date.now()
+      });
+    });
+  }
+        text: msg.text(),
+        timestamp: Date.now()
+      });
+    });
+
+    // 请求日志
+    page.on('request', (request: Request) => {
+      this.requestLogs.push({
+        url: request.url(),
+        method: request.method(),
+        timestamp: Date.now()
+      });
+    });
+
+    // 响应日志
+    page.on('response', (response: Response) => {
+      this.responseLogs.push({
+        url: response.url(),
+        status: response.status(),
+        timestamp: Date.now()
+      });
+    });
+  }
+
+  async getConsoleLogs(limit?: number) {
+    const logs = limit ? this.consoleLogs.slice(-limit) : this.consoleLogs;
+    return { success: true, logs };
+  }
+
+  async getRequestLogs(limit?: number) {
+    const logs = limit ? this.requestLogs.slice(-limit) : this.requestLogs;
+    return { success: true, logs };
+  }
+
+  async getResponseLogs(limit?: number) {
+    const logs = limit ? this.responseLogs.slice(-limit) : this.responseLogs;
+    return { success: true, logs };
+  }
+
+  async clearLogs() {
+    this.consoleLogs = [];
+    this.requestLogs = [];
+    this.responseLogs = [];
+    return { success: true, message: '日志已清除' };
+  }
+
+  async waitForRequest(urlPattern: string | RegExp, timeout?: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const request = await this.page.waitForRequest(urlPattern, { timeout });
+    return { 
+      success: true, 
+      url: request.url(), 
+      method: request.method(),
+      headers: request.headers()
+    };
+  }
+
+  async waitForResponse(urlPattern: string | RegExp, timeout?: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const response = await this.page.waitForResponse(urlPattern, { timeout });
+    return { 
+      success: true, 
+      url: response.url(), 
+      status: response.status(),
+      headers: response.headers()
+    };
+  }
+
+  async waitForEvent(eventName: string, timeout?: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.waitForEvent(eventName as any, { timeout });
+    return { success: true, event: eventName };
+  }
+
+  // ==================== 高级网络控制 ====================
+  
+  async blockRequests(patterns: string[]) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.route('**/*', (route: Route) => {
+      const url = route.request().url();
+      const shouldBlock = patterns.some(pattern => url.includes(pattern));
+      if (shouldBlock) {
+        route.abort();
+      } else {
+        route.continue();
+      }
+    });
+    return { success: true, message: '请求拦截已设置', patterns };
+  }
+
+  async mockResponse(urlPattern: string | RegExp, response: { status?: number; body?: string; contentType?: string }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.route(urlPattern, (route: Route) => {
+      route.fulfill({
+        status: response.status || 200,
+        body: response.body || '',
+        contentType: response.contentType || 'application/json'
+      });
+    });
+    return { success: true, message: '响应模拟已设置' };
+  }
+
+  async unroute(urlPattern?: string | RegExp) {
+    if (!this.page) throw new Error('浏览器未启动');
+    if (urlPattern) {
+      await this.page.unroute(urlPattern);
+    } else {
+      await this.page.unrouteAll();
+    }
+    return { success: true, message: '路由已移除' };
+  }
+
+  async setRequestInterception(enabled: boolean) {
+    if (!this.page) throw new Error('浏览器未启动');
+    if (enabled) {
+      await this.page.route('**/*', (route: Route) => route.continue());
+    } else {
+      await this.page.unrouteAll();
+    }
+    return { success: true, enabled };
+  }
+
+  // ==================== 键盘和鼠标高级操作 ====================
+  
+  async keyboardDown(key: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.keyboard.down(key);
+    return { success: true, key };
+  }
+
+  async keyboardUp(key: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.keyboard.up(key);
+    return { success: true, key };
+  }
+
+  async keyboardInsertText(text: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.keyboard.insertText(text);
+    return { success: true, text };
+  }
+
+  async mouseMove(x: number, y: number, steps?: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.mouse.move(x, y, { steps });
+    return { success: true, x, y };
+  }
+
+  async mouseDown(options?: { button?: 'left' | 'right' | 'middle'; clickCount?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.mouse.down(options);
+    return { success: true };
+  }
+
+  async mouseUp(options?: { button?: 'left' | 'right' | 'middle'; clickCount?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.mouse.up(options);
+    return { success: true };
+  }
+
+  async mouseWheel(deltaX: number, deltaY: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.mouse.wheel(deltaX, deltaY);
+    return { success: true, deltaX, deltaY };
+  }
+
+  async mouseClick(x: number, y: number, options?: { button?: 'left' | 'right' | 'middle'; clickCount?: number; delay?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.mouse.click(x, y, options);
+    return { success: true, x, y };
+  }
+
+  // ==================== 移动端特定功能 ====================
+  
+  async tap(selector: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.tap(selector);
+    return { success: true, selector };
+  }
+
+  async touchscreenTap(x: number, y: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.touchscreen.tap(x, y);
+    return { success: true, x, y };
+  }
+
+  async setGeolocation(latitude: number, longitude: number, accuracy?: number) {
+    if (!this.context) throw new Error('浏览器未启动');
+    await this.context.setGeolocation({ latitude, longitude, accuracy });
+    return { success: true, latitude, longitude };
+  }
+
+  async clearGeolocation() {
+    if (!this.context) throw new Error('浏览器未启动');
+    await this.context.clearPermissions();
+    return { success: true, message: '地理位置已清除' };
+  }
+
+  // ==================== 性能和指标 ====================
+  
+  async getMetrics() {
+    if (!this.page) throw new Error('浏览器未启动');
+    const metrics = await this.page.evaluate(() => {
+      const perf = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      return {
+        domContentLoaded: perf.domContentLoadedEventEnd - perf.domContentLoadedEventStart,
+        loadComplete: perf.loadEventEnd - perf.loadEventStart,
+        domInteractive: perf.domInteractive - perf.fetchStart,
+        firstPaint: performance.getEntriesByType('paint').find(e => e.name === 'first-paint')?.startTime || 0,
+        firstContentfulPaint: performance.getEntriesByType('paint').find(e => e.name === 'first-contentful-paint')?.startTime || 0
+      };
+    });
+    return { success: true, metrics };
+  }
+
+  async getCoverage() {
+    if (!this.page) throw new Error('浏览器未启动');
+    const [jsCoverage, cssCoverage] = await Promise.all([
+      this.page.coverage.startJSCoverage(),
+      this.page.coverage.startCSSCoverage()
+    ]);
+    
+    return { success: true, message: '代码覆盖率收集已启动' };
+  }
+
+  async stopCoverage() {
+    if (!this.page) throw new Error('浏览器未启动');
+    const [jsCoverage, cssCoverage] = await Promise.all([
+      this.page.coverage.stopJSCoverage(),
+      this.page.coverage.stopCSSCoverage()
+    ]);
+    
+    return { 
+      success: true, 
+      jsCoverage: jsCoverage.length,
+      cssCoverage: cssCoverage.length
+    };
+  }
+
+  // ==================== 无障碍功能 ====================
+  
+  async getAccessibilitySnapshot(selector?: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const snapshot = await this.page.accessibility.snapshot({ root: selector ? await this.page.$(selector) : undefined });
+    return { success: true, snapshot };
+  }
+
+  // ==================== 时间控制 ====================
+  
+  async installClock(time?: number | Date) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.clock.install({ time });
+    return { success: true, message: '时钟已安装' };
+  }
+
+  async setSystemTime(time: number | Date) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.clock.setSystemTime(time);
+    return { success: true, time: time.toString() };
+  }
+
+  async fastForward(time: number) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.clock.fastForward(time);
+    return { success: true, time };
+  }
+
+  async pauseClock() {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.clock.pauseAt(Date.now());
+    return { success: true, message: '时钟已暂停' };
+  }
+
+  async resumeClock() {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.clock.resume();
+    return { success: true, message: '时钟已恢复' };
+  }
+
+  // ==================== 高级选择器 ====================
+  
+  async getByRole(role: string, options?: { name?: string }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const locator = this.page.getByRole(role as any, options);
+    const count = await locator.count();
+    return { success: true, count, role };
+  }
+
+  async getByText(text: string | RegExp, options?: { exact?: boolean }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const locator = this.page.getByText(text, options);
+    const count = await locator.count();
+    return { success: true, count, text: text.toString() };
+  }
+
+  async getByLabel(text: string | RegExp, options?: { exact?: boolean }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const locator = this.page.getByLabel(text, options);
+    const count = await locator.count();
+    return { success: true, count, label: text.toString() };
+  }
+
+  async getByPlaceholder(text: string | RegExp, options?: { exact?: boolean }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const locator = this.page.getByPlaceholder(text, options);
+    const count = await locator.count();
+    return { success: true, count, placeholder: text.toString() };
+  }
+
+  async getByTestId(testId: string) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const locator = this.page.getByTestId(testId);
+    const count = await locator.count();
+    return { success: true, count, testId };
+  }
+
+  async getByAltText(text: string | RegExp, options?: { exact?: boolean }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const locator = this.page.getByAltText(text, options);
+    const count = await locator.count();
+    return { success: true, count, altText: text.toString() };
+  }
+
+  async getByTitle(text: string | RegExp, options?: { exact?: boolean }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    const locator = this.page.getByTitle(text, options);
+    const count = await locator.count();
+    return { success: true, count, title: text.toString() };
+  }
+
+  // ==================== 高级等待 ====================
+  
+  async waitForFunction(fn: string, arg?: any, options?: { timeout?: number; polling?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.waitForFunction(fn, arg, options);
+    return { success: true };
+  }
+
+  async waitForLoadState(state: 'load' | 'domcontentloaded' | 'networkidle', options?: { timeout?: number }) {
+    if (!this.page) throw new Error('浏览器未启动');
+    await this.page.waitForLoadState(state, options);
+    return { success: true, state };
+  }
+
+  // ==================== 浏览器上下文管理 ====================
+  
+  async storageState(path?: string) {
+    if (!this.context) throw new Error('浏览器未启动');
+    const state = await this.context.storageState({ path });
+    return { success: true, state };
+  }
+
+  async restoreStorageState(state: any) {
+    if (!this.browser) throw new Error('浏览器未启动');
+    await this.context?.close();
+    this.context = await this.browser.newContext({ storageState: state });
+    this.page = await this.context.newPage();
+    this.pages = [this.page];
+    this.setupEventListeners();
+    return { success: true, message: '存储状态已恢复' };
+  }
+
+  async grantPermissions(permissions: string[], options?: { origin?: string }) {
+    if (!this.context) throw new Error('浏览器未启动');
+    await this.context.grantPermissions(permissions, options);
+    return { success: true, permissions };
+  }
+
+  async clearPermissions() {
+    if (!this.context) throw new Error('浏览器未启动');
+    await this.context.clearPermissions();
+    return { success: true, message: '权限已清除' };
+  }
+
+  // ==================== 浏览器信息 ====================
+  
+  async getBrowserVersion() {
+    if (!this.browser) throw new Error('浏览器未启动');
+    const version = this.browser.version();
+    return { success: true, version };
+  }
+
+  async getBrowserContexts() {
+    if (!this.browser) throw new Error('浏览器未启动');
+    const contexts = this.browser.contexts();
+    return { success: true, count: contexts.length };
+  }
+
+  async isConnected() {
+    if (!this.browser) return { success: true, connected: false };
+    return { success: true, connected: this.browser.isConnected() };
+  }
+}
+
+export default PlaywrightBrowserSkill;
