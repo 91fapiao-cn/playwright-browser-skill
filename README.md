@@ -30,7 +30,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/playwright-browser-skill.git
+git clone https://github.com/91fapiao-cn/playwright-browser-skill.git
 cd playwright-browser-skill
 
 # 安装依赖
@@ -259,9 +259,9 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 
 ## 📞 支持
 
-- 📧 Email: your-email@example.com
-- 🐛 Issues: [GitHub Issues](https://github.com/your-username/playwright-browser-skill/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/your-username/playwright-browser-skill/discussions)
+- 📧 Email: 91fapiao@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/91fapiao-cn/playwright-browser-skill/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/91fapiao-cn/playwright-browser-skill/discussions)
 
 ## ⭐ Star History
 

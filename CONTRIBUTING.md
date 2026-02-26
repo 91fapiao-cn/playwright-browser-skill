@@ -68,7 +68,7 @@ npm run build
 
 ```bash
 # 克隆你的 fork
-git clone https://github.com/your-username/playwright-browser-skill.git
+git clone https://github.com/91fapiao-cn/playwright-browser-skill.git
 
 # 安装依赖
 npm install
