@@ -32,7 +32,7 @@ async function main() {
 
     // 执行JavaScript
     const { result } = await browser.evaluate('document.body.innerText');
-    console.log('页面文本长度:', result.length);
+    console.log('页面文本长度:', (result as string).length);
 
   } catch (error) {
     console.error('错误:', error);
