@@ -1648,7 +1648,7 @@ browser_get_by_test_id({ "testId": "submit-button" })
 - **对话框处理**: 1个工具
 - **Frame操作**: 1个工具
 
-**总计：88个核心工具**
+**总计：101个核心工具**
 
 ---
 

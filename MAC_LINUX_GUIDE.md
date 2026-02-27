@@ -176,8 +176,8 @@ node dist/mcp-server.js
 
 应该看到类似输出：
 ```
-Playwright Browser MCP Server v2.0 已启动
-已注册 88 个工具，覆盖 100% 浏览器自动化场景
+Playwright Browser MCP Server v2.1 已启动
+已注册 101 个工具，覆盖 100% 浏览器自动化场景
 ```
 
 按 `Ctrl+C` 停止测试。
@@ -586,8 +586,8 @@ node dist/mcp-server.js
 
 You should see output similar to:
 ```
-Playwright Browser MCP Server v2.0 started
-Registered 88 tools, covering 100% browser automation scenarios
+Playwright Browser MCP Server v2.1 started
+Registered 101 tools, covering 100% browser automation scenarios
 ```
 
 Press `Ctrl+C` to stop the test.

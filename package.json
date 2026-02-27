@@ -1,7 +1,7 @@
 {
   "name": "playwright-browser-skill",
   "version": "2.1.0",
-  "description": "A powerful browser automation skill for OpenClaw/Kiro, providing 88+ complete browser operations through MCP protocol",
+  "description": "A powerful browser automation skill for OpenClaw/Kiro, providing 101 complete browser operations through MCP protocol",
   "main": "dist/index.js",
   "type": "module",
   "bin": {

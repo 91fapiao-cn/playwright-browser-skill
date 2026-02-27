@@ -175,8 +175,8 @@ node dist\mcp-server.js
 
 应该看到：
 ```
-Playwright Browser MCP Server v2.0 已启动
-已注册 100+ 个工具，覆盖 100% 浏览器自动化场景
+Playwright Browser MCP Server v2.1 已启动
+已注册 101 个工具，覆盖 100% 浏览器自动化场景
 ```
 
 按 `Ctrl+C` 停止服务器。
