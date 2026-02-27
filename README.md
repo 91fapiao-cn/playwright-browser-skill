@@ -49,13 +49,16 @@ npm run build
 
 ### 一键自动部署（推荐）
 
-我们提供了跨平台的自动部署脚本，可以自动检测 OpenClaw 路径并完成所有配置：
+我们提供了跨平台的自动部署脚本，支持中英文版本，可以自动检测 OpenClaw 路径并完成所有配置：
 
 #### Windows (PowerShell) - 推荐
 
 ```powershell
-# 完整部署（自动构建 + 部署）
+# 中文版
 .\auto-deploy.ps1
+
+# 英文版
+.\auto-deploy-en.ps1
 
 # 跳过构建（如果已构建）
 .\auto-deploy.ps1 -SkipBuild
@@ -67,8 +70,11 @@ npm run build
 #### Windows (CMD)
 
 ```cmd
-REM 完整部署
+REM 中文版
 auto-deploy.cmd
+
+REM 英文版
+auto-deploy-en.cmd
 
 REM 跳过构建
 auto-deploy.cmd --skip-build
@@ -81,10 +87,13 @@ auto-deploy.cmd --openclaw-path "C:\custom\path\.openclaw"
 
 ```bash
 # 添加执行权限（首次使用）
-chmod +x auto-deploy.sh
+chmod +x auto-deploy.sh auto-deploy-en.sh
 
-# 完整部署
+# 中文版
 ./auto-deploy.sh
+
+# 英文版
+./auto-deploy-en.sh
 
 # 跳过构建
 ./auto-deploy.sh --skip-build

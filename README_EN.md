@@ -49,48 +49,57 @@ npm run build
 
 ### One-Click Auto Deploy (Recommended)
 
-We provide cross-platform auto-deploy scripts that automatically detect OpenClaw paths and complete all configurations:
+We provide cross-platform auto-deploy scripts in both Chinese and English that automatically detect OpenClaw paths and complete all configurations:
 
 #### Windows (PowerShell) - Recommended
 
 ```powershell
-# Full deployment (auto-build + deploy)
+# English version
+.\auto-deploy-en.ps1
+
+# Chinese version
 .\auto-deploy.ps1
 
 # Skip build (if already built)
-.\auto-deploy.ps1 -SkipBuild
+.\auto-deploy-en.ps1 -SkipBuild
 
 # Specify custom path
-.\auto-deploy.ps1 -OpenClawPath "C:\custom\path\.openclaw"
+.\auto-deploy-en.ps1 -OpenClawPath "C:\custom\path\.openclaw"
 ```
 
 #### Windows (CMD)
 
 ```cmd
-REM Full deployment
+REM English version
+auto-deploy-en.cmd
+
+REM Chinese version
 auto-deploy.cmd
 
 REM Skip build
-auto-deploy.cmd --skip-build
+auto-deploy-en.cmd --skip-build
 
 REM Specify custom path
-auto-deploy.cmd --openclaw-path "C:\custom\path\.openclaw"
+auto-deploy-en.cmd --openclaw-path "C:\custom\path\.openclaw"
 ```
 
 #### Mac/Linux
 
 ```bash
 # Add execute permission (first time)
-chmod +x auto-deploy.sh
+chmod +x auto-deploy-en.sh auto-deploy.sh
 
-# Full deployment
+# English version
+./auto-deploy-en.sh
+
+# Chinese version
 ./auto-deploy.sh
 
 # Skip build
-./auto-deploy.sh --skip-build
+./auto-deploy-en.sh --skip-build
 
 # Specify custom path
-./auto-deploy.sh --openclaw-path "/custom/path/.openclaw"
+./auto-deploy-en.sh --openclaw-path "/custom/path/.openclaw"
 ```
 
 **Auto-Deploy Features:**
