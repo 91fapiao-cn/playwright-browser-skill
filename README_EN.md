@@ -285,6 +285,7 @@ npm run test:mcp
 - [Auto-Deploy Guide](AUTO_DEPLOY_README_EN.md) - Cross-platform auto-deploy detailed instructions
 - [Complete Tool Documentation](skill-package/skills/playwright-browser.md) - Detailed description of all 88 tools
 - [Windows Usage Guide](WINDOWS_GUIDE.md) - Windows platform specific instructions
+- [Mac/Linux Usage Guide](MAC_LINUX_GUIDE.md) - Mac and Linux platform specific instructions
 - [Quick Start Guide](QUICK_START_WINDOWS.md) - Quick start tutorial
 - [API Documentation](API.md) - API reference
 - [Architecture Description](ARCHITECTURE.md) - Project architecture

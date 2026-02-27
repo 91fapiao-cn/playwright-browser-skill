@@ -285,6 +285,7 @@ npm run test:mcp
 - [自动部署指南](AUTO_DEPLOY_README.md) - 跨平台自动部署详细说明 | [English](AUTO_DEPLOY_README_EN.md)
 - [完整工具文档](skill-package/skills/playwright-browser.md) - 所有88个工具的详细说明
 - [Windows 使用指南](WINDOWS_GUIDE.md) - Windows 平台特定说明
+- [Mac/Linux 使用指南](MAC_LINUX_GUIDE.md) - Mac 和 Linux 平台特定说明
 - [快速开始指南](QUICK_START_WINDOWS.md) - 快速上手教程
 - [API 文档](API.md) - API 参考
 - [架构说明](ARCHITECTURE.md) - 项目架构
