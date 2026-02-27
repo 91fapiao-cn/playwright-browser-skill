@@ -7,6 +7,8 @@
 [![Playwright](https://img.shields.io/badge/Playwright-1.40%2B-orange.svg)](https://playwright.dev/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+中文文档 | [English](README_EN.md)
+
 ## ✨ 特性
 
 - 🌐 **完整的浏览器控制** - 支持 Chromium、Firefox、WebKit
@@ -235,7 +237,7 @@ npm run test:mcp
 
 ## 📖 文档
 
-- [自动部署指南](AUTO_DEPLOY_README.md) - 跨平台自动部署详细说明
+- [自动部署指南](AUTO_DEPLOY_README.md) - 跨平台自动部署详细说明 | [English](AUTO_DEPLOY_README_EN.md)
 - [完整工具文档](.kiro/skills/playwright-browser.md) - 所有88个工具的详细说明
 - [Windows 使用指南](WINDOWS_GUIDE.md) - Windows 平台特定说明
 - [快速开始指南](QUICK_START_WINDOWS.md) - 快速上手教程

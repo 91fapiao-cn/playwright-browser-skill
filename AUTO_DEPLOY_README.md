@@ -2,6 +2,8 @@
 
 本项目提供了三个自动部署脚本，可以自动检测 OpenClaw/Kiro 配置路径并完成完整部署。
 
+[English Version](AUTO_DEPLOY_README_EN.md)
+
 ## 脚本列表
 
 | 脚本文件 | 平台 | 说明 |
