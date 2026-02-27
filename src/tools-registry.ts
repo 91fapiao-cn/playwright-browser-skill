@@ -267,6 +267,28 @@ export const toolsRegistry = [
     }
   },
   {
+    name: 'browser_mouse_down',
+    description: '按下鼠标按键',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        button: { type: 'string', enum: ['left', 'right', 'middle'] },
+        clickCount: { type: 'number' }
+      }
+    }
+  },
+  {
+    name: 'browser_mouse_up',
+    description: '释放鼠标按键',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        button: { type: 'string', enum: ['left', 'right', 'middle'] },
+        clickCount: { type: 'number' }
+      }
+    }
+  },
+  {
     name: 'browser_mouse_wheel',
     description: '鼠标滚轮',
     inputSchema: {
@@ -276,6 +298,17 @@ export const toolsRegistry = [
         deltaY: { type: 'number' }
       },
       required: ['deltaX', 'deltaY']
+    }
+  },
+  {
+    name: 'browser_keyboard_insert_text',
+    description: '插入文本（不触发键盘事件）',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        text: { type: 'string' }
+      },
+      required: ['text']
     }
   },
 
@@ -425,6 +458,30 @@ export const toolsRegistry = [
       required: ['testId']
     }
   },
+  {
+    name: 'browser_get_by_alt_text',
+    description: '通过alt文本查找元素',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        text: { type: 'string' },
+        exact: { type: 'boolean' }
+      },
+      required: ['text']
+    }
+  },
+  {
+    name: 'browser_get_by_title',
+    description: '通过title属性查找元素',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        text: { type: 'string' },
+        exact: { type: 'boolean' }
+      },
+      required: ['text']
+    }
+  },
 
   // ==================== 等待操作 ====================
   {
@@ -483,6 +540,32 @@ export const toolsRegistry = [
         timeout: { type: 'number' }
       },
       required: ['urlPattern']
+    }
+  },
+  {
+    name: 'browser_wait_for_function',
+    description: '等待函数返回true',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        fn: { type: 'string' },
+        arg: { type: 'any' },
+        timeout: { type: 'number' },
+        polling: { type: 'number' }
+      },
+      required: ['fn']
+    }
+  },
+  {
+    name: 'browser_wait_for_load_state',
+    description: '等待页面加载状态',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        state: { type: 'string', enum: ['load', 'domcontentloaded', 'networkidle'] },
+        timeout: { type: 'number' }
+      },
+      required: ['state']
     }
   },
 
@@ -759,6 +842,23 @@ export const toolsRegistry = [
       required: ['latitude', 'longitude']
     }
   },
+  {
+    name: 'browser_clear_geolocation',
+    description: '清除地理位置',
+    inputSchema: { type: 'object', properties: {} }
+  },
+  {
+    name: 'browser_touchscreen_tap',
+    description: '触摸屏点击坐标',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        x: { type: 'number' },
+        y: { type: 'number' }
+      },
+      required: ['x', 'y']
+    }
+  },
 
   // ==================== 滚动操作 ====================
   {
@@ -803,6 +903,16 @@ export const toolsRegistry = [
     description: '获取性能指标',
     inputSchema: { type: 'object', properties: {} }
   },
+  {
+    name: 'browser_get_coverage',
+    description: '开始收集代码覆盖率',
+    inputSchema: { type: 'object', properties: {} }
+  },
+  {
+    name: 'browser_stop_coverage',
+    description: '停止收集代码覆盖率',
+    inputSchema: { type: 'object', properties: {} }
+  },
 
   // ==================== 无障碍 ====================
   {
@@ -840,6 +950,16 @@ export const toolsRegistry = [
       properties: { time: { type: 'number' } },
       required: ['time']
     }
+  },
+  {
+    name: 'browser_pause_clock',
+    description: '暂停时钟',
+    inputSchema: { type: 'object', properties: {} }
+  },
+  {
+    name: 'browser_resume_clock',
+    description: '恢复时钟',
+    inputSchema: { type: 'object', properties: {} }
   },
 
   // ==================== 权限管理 ====================

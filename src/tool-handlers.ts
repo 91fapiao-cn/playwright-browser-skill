@@ -35,7 +35,10 @@ export async function handleToolCall(browser: PlaywrightBrowserSkill, name: stri
     // 键盘鼠标
     case 'browser_keyboard_down': return await browser.keyboardDown(args.key);
     case 'browser_keyboard_up': return await browser.keyboardUp(args.key);
+    case 'browser_keyboard_insert_text': return await browser.keyboardInsertText(args.text);
     case 'browser_mouse_move': return await browser.mouseMove(args.x, args.y, args.steps);
+    case 'browser_mouse_down': return await browser.mouseDown(args);
+    case 'browser_mouse_up': return await browser.mouseUp(args);
     case 'browser_mouse_click': return await browser.mouseClick(args.x, args.y, args);
     case 'browser_mouse_wheel': return await browser.mouseWheel(args.deltaX, args.deltaY);
 
@@ -58,6 +61,8 @@ export async function handleToolCall(browser: PlaywrightBrowserSkill, name: stri
     case 'browser_get_by_label': return await browser.getByLabel(args.text, args);
     case 'browser_get_by_placeholder': return await browser.getByPlaceholder(args.text, args);
     case 'browser_get_by_test_id': return await browser.getByTestId(args.testId);
+    case 'browser_get_by_alt_text': return await browser.getByAltText(args.text, args);
+    case 'browser_get_by_title': return await browser.getByTitle(args.text, args);
 
     // 等待操作
     case 'browser_wait_for_selector': return await browser.waitForSelector(args.selector, args);
@@ -65,6 +70,8 @@ export async function handleToolCall(browser: PlaywrightBrowserSkill, name: stri
     case 'browser_wait_for_url': return await browser.waitForURL(args.url, args);
     case 'browser_wait_for_request': return await browser.waitForRequest(args.urlPattern, args.timeout);
     case 'browser_wait_for_response': return await browser.waitForResponse(args.urlPattern, args.timeout);
+    case 'browser_wait_for_function': return await browser.waitForFunction(args.fn, args.arg, args);
+    case 'browser_wait_for_load_state': return await browser.waitForLoadState(args.state, args);
 
     // 截图和PDF
     case 'browser_screenshot': return await browser.screenshot(args);
@@ -107,6 +114,8 @@ export async function handleToolCall(browser: PlaywrightBrowserSkill, name: stri
     case 'browser_get_viewport_size': return await browser.getViewportSize();
     case 'browser_emulate_media': return await browser.emulateMedia(args);
     case 'browser_set_geolocation': return await browser.setGeolocation(args.latitude, args.longitude, args.accuracy);
+    case 'browser_clear_geolocation': return await browser.clearGeolocation();
+    case 'browser_touchscreen_tap': return await browser.touchscreenTap(args.x, args.y);
 
     // 滚动操作
     case 'browser_scroll_to': return await browser.scrollTo(args.x, args.y);
@@ -117,6 +126,8 @@ export async function handleToolCall(browser: PlaywrightBrowserSkill, name: stri
 
     // 性能和指标
     case 'browser_get_metrics': return await browser.getMetrics();
+    case 'browser_get_coverage': return await browser.getCoverage();
+    case 'browser_stop_coverage': return await browser.stopCoverage();
 
     // 无障碍
     case 'browser_get_accessibility_snapshot': return await browser.getAccessibilitySnapshot(args.selector);
@@ -125,6 +136,8 @@ export async function handleToolCall(browser: PlaywrightBrowserSkill, name: stri
     case 'browser_install_clock': return await browser.installClock(args.time);
     case 'browser_set_system_time': return await browser.setSystemTime(args.time);
     case 'browser_fast_forward': return await browser.fastForward(args.time);
+    case 'browser_pause_clock': return await browser.pauseClock();
+    case 'browser_resume_clock': return await browser.resumeClock();
 
     // 权限管理
     case 'browser_grant_permissions': return await browser.grantPermissions(args.permissions, args);

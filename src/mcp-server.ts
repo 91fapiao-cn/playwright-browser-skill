@@ -13,7 +13,7 @@ import { handleToolCall } from './tool-handlers.js';
 const server = new Server(
   {
     name: 'playwright-browser-skill',
-    version: '2.0.0',
+    version: '2.1.0',
   },
   {
     capabilities: {
@@ -62,7 +62,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error(`Playwright Browser MCP Server v2.0 已启动`);
+  console.error(`Playwright Browser MCP Server v2.1 已启动`);
   console.error(`已注册 ${toolCount} 个工具，覆盖 100% 浏览器自动化场景`);
 }
 

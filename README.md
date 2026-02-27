@@ -1,6 +1,6 @@
 ﻿# Playwright Browser Skill for OpenClaw
 
-一个功能强大的浏览器自动化技能，基于 Playwright 构建，通过 MCP 协议为 OpenClaw 提供 88+ 完整的浏览器操作能力。
+一个功能强大的浏览器自动化技能，基于 Playwright 构建，通过 MCP 协议为 OpenClaw 提供 101 个完整的浏览器操作能力。
 
 [![Windows](https://img.shields.io/badge/Windows-支持-blue.svg)](WINDOWS_GUIDE.md)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
@@ -283,7 +283,7 @@ npm run test:mcp
 
 - [配置指南](CONFIGURATION_GUIDE.md) - 无头模式、浏览器选项等详细配置说明
 - [自动部署指南](AUTO_DEPLOY_README.md) - 跨平台自动部署详细说明 | [English](AUTO_DEPLOY_README_EN.md)
-- [完整工具文档](skill-package/skills/playwright-browser.md) - 所有88个工具的详细说明
+- [完整工具文档](skill-package/skills/playwright-browser.md) - 所有101个工具的详细说明
 - [Windows 使用指南](WINDOWS_GUIDE.md) - Windows 平台特定说明
 - [Mac/Linux 使用指南](MAC_LINUX_GUIDE.md) - Mac 和 Linux 平台特定说明
 - [快速开始指南](QUICK_START_WINDOWS.md) - 快速上手教程
@@ -340,6 +340,16 @@ npm run build
 - 💾 自动备份现有配置
 - 📦 支持自定义安装路径
 - 📚 完整的自动部署文档
+
+### v2.1.0 (2026)
+- ✨ 新增 13 个高级工具（从88个增加到101个）
+- 🎯 完善键盘鼠标控制（mouseDown, mouseUp, keyboardInsertText）
+- 🔍 增强选择器功能（getByAltText, getByTitle）
+- ⏱️ 完整时间控制（pauseClock, resumeClock）
+- 📊 代码覆盖率支持（getCoverage, stopCoverage）
+- 🌐 地理位置管理（clearGeolocation, touchscreenTap）
+- ⏳ 高级等待功能（waitForFunction, waitForLoadState）
+- 📈 总体覆盖率从69%提升到88%
 
 ### v2.0.0 (2026)
 - ✨ 新增 88 个完整的浏览器操作工具

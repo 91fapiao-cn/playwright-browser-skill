@@ -1,6 +1,6 @@
 # Playwright Browser Skill for OpenClaw
 
-A powerful browser automation skill built on Playwright, providing 88+ complete browser operation capabilities for OpenClaw through the MCP protocol.
+A powerful browser automation skill built on Playwright, providing 101 complete browser operation capabilities for OpenClaw through the MCP protocol.
 
 [![Windows](https://img.shields.io/badge/Windows-Supported-blue.svg)](WINDOWS_GUIDE.md)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
@@ -283,7 +283,7 @@ npm run test:mcp
 
 - [Configuration Guide](CONFIGURATION_GUIDE.md) - Detailed configuration for headless mode, browser options, etc.
 - [Auto-Deploy Guide](AUTO_DEPLOY_README_EN.md) - Cross-platform auto-deploy detailed instructions
-- [Complete Tool Documentation](skill-package/skills/playwright-browser.md) - Detailed description of all 88 tools
+- [Complete Tool Documentation](skill-package/skills/playwright-browser.md) - Detailed description of all 101 tools
 - [Windows Usage Guide](WINDOWS_GUIDE.md) - Windows platform specific instructions
 - [Mac/Linux Usage Guide](MAC_LINUX_GUIDE.md) - Mac and Linux platform specific instructions
 - [Quick Start Guide](QUICK_START_WINDOWS.md) - Quick start tutorial
@@ -340,6 +340,16 @@ Contributions welcome! Please see [Contributing Guide](CONTRIBUTING.md).
 - 💾 Auto-backup existing configurations
 - 📦 Support custom installation paths
 - 📚 Complete auto-deploy documentation
+
+### v2.1.0 (2026)
+- ✨ Added 13 advanced tools (increased from 88 to 101)
+- 🎯 Enhanced keyboard and mouse control (mouseDown, mouseUp, keyboardInsertText)
+- 🔍 Improved selector capabilities (getByAltText, getByTitle)
+- ⏱️ Complete time control (pauseClock, resumeClock)
+- 📊 Code coverage support (getCoverage, stopCoverage)
+- 🌐 Geolocation management (clearGeolocation, touchscreenTap)
+- ⏳ Advanced waiting features (waitForFunction, waitForLoadState)
+- 📈 Overall coverage increased from 69% to 88%
 
 ### v2.0.0 (2026)
 - ✨ Added 88 complete browser operation tools

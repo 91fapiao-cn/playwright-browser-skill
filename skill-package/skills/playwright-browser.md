@@ -1,32 +1,32 @@
 ---
 name: playwright-browser
-description: 浏览器自动化技能，支持100+工具：页面导航、元素交互、内容提取、截图、网络控制、性能监控等
-version: 2.0.0
+description: 浏览器自动化技能，支持101个工具：页面导航、元素交互、内容提取、截图、网络控制、性能监控等
+version: 2.1.0
 ---
 
 # Playwright Browser Skill - 完整工具文档
 
-这是一个基于 Playwright 的浏览器自动化技能，通过 MCP 协议提供 100+ 完整的浏览器操作能力。
+这是一个基于 Playwright 的浏览器自动化技能，通过 MCP 协议提供 101 个完整的浏览器操作能力。
 
 ## 目录
 
 1. [浏览器管理](#浏览器管理) (8个工具)
 2. [页面导航](#页面导航) (4个工具)
 3. [元素交互](#元素交互) (12个工具)
-4. [键盘鼠标操作](#键盘鼠标操作) (5个工具)
+4. [键盘鼠标操作](#键盘鼠标操作) (8个工具)
 5. [内容提取](#内容提取) (11个工具)
-6. [高级选择器](#高级选择器) (5个工具)
-7. [等待操作](#等待操作) (5个工具)
+6. [高级选择器](#高级选择器) (7个工具)
+7. [等待操作](#等待操作) (7个工具)
 8. [截图和PDF](#截图和pdf) (3个工具)
 9. [JavaScript执行](#javascript执行) (3个工具)
 10. [Cookie和存储](#cookie和存储) (8个工具)
 11. [网络控制](#网络控制) (7个工具)
 12. [文件操作](#文件操作) (2个工具)
-13. [视口和设备](#视口和设备) (4个工具)
+13. [视口和设备](#视口和设备) (6个工具)
 14. [滚动操作](#滚动操作) (2个工具)
-15. [性能指标](#性能指标) (1个工具)
+15. [性能指标](#性能指标) (3个工具)
 16. [无障碍功能](#无障碍功能) (1个工具)
-17. [时间控制](#时间控制) (3个工具)
+17. [时间控制](#时间控制) (5个工具)
 18. [权限管理](#权限管理) (2个工具)
 19. [对话框处理](#对话框处理) (1个工具)
 20. [Frame操作](#frame操作) (1个工具)
@@ -418,6 +418,49 @@ version: 2.0.0
 }
 ```
 
+### browser_mouse_down
+按下鼠标按键（不释放）
+
+**参数：**
+- `button`: 'left' | 'right' | 'middle' - 鼠标按键
+- `clickCount`: number - 点击次数
+
+**调用示例：**
+```json
+{
+  "button": "left",
+  "clickCount": 1
+}
+```
+
+### browser_mouse_up
+释放鼠标按键
+
+**参数：**
+- `button`: 'left' | 'right' | 'middle' - 鼠标按键
+- `clickCount`: number - 点击次数
+
+**调用示例：**
+```json
+{
+  "button": "left",
+  "clickCount": 1
+}
+```
+
+### browser_keyboard_insert_text
+插入文本（不触发键盘事件，直接设置值）
+
+**参数：**
+- `text`: string - 要插入的文本（必需）
+
+**调用示例：**
+```json
+{
+  "text": "Hello World"
+}
+```
+
 ---
 
 ## 内容提取
@@ -618,6 +661,36 @@ version: 2.0.0
 { "testId": "submit-button" }
 ```
 
+### browser_get_by_alt_text
+通过alt属性文本查找图片元素
+
+**参数：**
+- `text`: string - alt文本（必需）
+- `exact`: boolean - 是否精确匹配
+
+**调用示例：**
+```json
+{
+  "text": "Company Logo",
+  "exact": false
+}
+```
+
+### browser_get_by_title
+通过title属性查找元素
+
+**参数：**
+- `text`: string - title文本（必需）
+- `exact`: boolean - 是否精确匹配
+
+**调用示例：**
+```json
+{
+  "text": "Click to expand",
+  "exact": false
+}
+```
+
 ---
 
 ## 等待操作
@@ -692,6 +765,39 @@ version: 2.0.0
 {
   "urlPattern": "**/api/data",
   "timeout": 10000
+}
+```
+
+### browser_wait_for_function
+等待JavaScript函数返回true
+
+**参数：**
+- `fn`: string - JavaScript函数代码（必需）
+- `arg`: any - 传递给函数的参数
+- `timeout`: number - 超时时间（毫秒）
+- `polling`: number - 轮询间隔（毫秒）
+
+**调用示例：**
+```json
+{
+  "fn": "() => document.readyState === 'complete'",
+  "timeout": 5000,
+  "polling": 100
+}
+```
+
+### browser_wait_for_load_state
+等待页面加载到指定状态
+
+**参数：**
+- `state`: 'load' | 'domcontentloaded' | 'networkidle' - 加载状态（必需）
+- `timeout`: number - 超时时间（毫秒）
+
+**调用示例：**
+```json
+{
+  "state": "networkidle",
+  "timeout": 30000
 }
 ```
 
@@ -1087,6 +1193,31 @@ version: 2.0.0
 }
 ```
 
+### browser_clear_geolocation
+清除地理位置设置
+
+**参数：** 无
+
+**调用示例：**
+```json
+{}
+```
+
+### browser_touchscreen_tap
+触摸屏点击指定坐标（移动端）
+
+**参数：**
+- `x`: number - X坐标（必需）
+- `y`: number - Y坐标（必需）
+
+**调用示例：**
+```json
+{
+  "x": 100,
+  "y": 200
+}
+```
+
 ---
 
 ## 滚动操作
@@ -1136,6 +1267,26 @@ version: 2.0.0
 - loadComplete: 页面完全加载时间
 - firstPaint: 首次绘制时间
 - firstContentfulPaint: 首次内容绘制时间
+
+### browser_get_coverage
+开始收集JavaScript和CSS代码覆盖率
+
+**参数：** 无
+
+**调用示例：**
+```json
+{}
+```
+
+### browser_stop_coverage
+停止收集代码覆盖率并返回结果
+
+**参数：** 无
+
+**调用示例：**
+```json
+{}
+```
 
 ---
 
@@ -1187,6 +1338,26 @@ version: 2.0.0
 **调用示例：**
 ```json
 { "time": 60000 }
+```
+
+### browser_pause_clock
+暂停时钟（冻结时间）
+
+**参数：** 无
+
+**调用示例：**
+```json
+{}
+```
+
+### browser_resume_clock
+恢复时钟运行
+
+**参数：** 无
+
+**调用示例：**
+```json
+{}
 ```
 
 ---
