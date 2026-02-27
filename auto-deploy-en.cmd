@@ -1,0 +1,248 @@
+@echo off
+REM Playwright Browser Skill - Auto Deploy Script (Windows)
+REM Automatically detects OpenClaw path and completes deployment
+
+setlocal enabledelayedexpansion
+
+REM Parameter processing
+set "OPENCLAW_PATH="
+set "SKIP_BUILD=0"
+
+:parse_args
+if "%~1"=="" goto args_done
+if /i "%~1"=="--openclaw-path" (
+    set "OPENCLAW_PATH=%~2"
+    shift
+    shift
+    goto parse_args
+)
+if /i "%~1"=="--skip-build" (
+    set "SKIP_BUILD=1"
+    shift
+    goto parse_args
+)
+if /i "%~1"=="-h" goto show_help
+if /i "%~1"=="--help" goto show_help
+echo [X] Unknown parameter: %~1
+exit /b 1
+
+:show_help
+echo Usage: %~nx0 [options]
+echo.
+echo Options:
+echo   --openclaw-path PATH   Specify OpenClaw configuration path
+echo   --skip-build           Skip project build
+echo   -h, --help             Show help information
+exit /b 0
+
+:args_done
+
+echo ========================================
+echo Playwright Browser Skill - Auto Deploy
+echo ========================================
+echo.
+
+REM Step 0: Check project directory
+echo [0/5] Checking project environment...
+
+if not exist "skill-package\skills\playwright-browser.md" (
+    echo [X] Error: Please run this script in the project root directory
+    echo     Current directory: %CD%
+    exit /b 1
+)
+
+set "PROJECT_PATH=%CD%"
+echo [√] Project directory: %PROJECT_PATH%
+echo.
+
+REM Step 1: Build project
+if "%SKIP_BUILD%"=="0" (
+    echo [1/5] Building project...
+    
+    if not exist "package.json" (
+        echo [X] Error: package.json not found
+        exit /b 1
+    )
+    
+    echo   Executing: npm run build
+    call npm run build
+    
+    if errorlevel 1 (
+        echo [X] Build failed
+        exit /b 1
+    )
+    
+    if not exist "dist\mcp-server.js" (
+        echo [X] Error: Build artifact not found (dist\mcp-server.js)
+        exit /b 1
+    )
+    
+    echo [√] Project built successfully
+) else (
+    echo [1/5] Skipping build (using --skip-build parameter)
+    
+    if not exist "dist\mcp-server.js" (
+        echo [X] Error: dist\mcp-server.js does not exist, please build the project first
+        exit /b 1
+    )
+)
+echo.
+
+REM Step 2: Detect OpenClaw path
+echo [2/5] Detecting OpenClaw configuration path...
+
+if defined OPENCLAW_PATH (
+    echo   Using specified path: %OPENCLAW_PATH%
+    set "OPENCLAW_DIR=%OPENCLAW_PATH%"
+) else (
+    REM Check common paths
+    if exist "%USERPROFILE%\.openclaw" (
+        set "OPENCLAW_DIR=%USERPROFILE%\.openclaw"
+        echo [√] Found OpenClaw config directory: !OPENCLAW_DIR!
+    ) else if exist "%USERPROFILE%\.kiro" (
+        set "OPENCLAW_DIR=%USERPROFILE%\.kiro"
+        echo [√] Found Kiro config directory: !OPENCLAW_DIR!
+    ) else if exist "%APPDATA%\openclaw" (
+        set "OPENCLAW_DIR=%APPDATA%\openclaw"
+        echo [√] Found OpenClaw config directory: !OPENCLAW_DIR!
+    ) else if exist "%LOCALAPPDATA%\openclaw" (
+        set "OPENCLAW_DIR=%LOCALAPPDATA%\openclaw"
+        echo [√] Found OpenClaw config directory: !OPENCLAW_DIR!
+    ) else (
+        set "OPENCLAW_DIR=%USERPROFILE%\.openclaw"
+        echo [!] No existing config found, will use default path: !OPENCLAW_DIR!
+    )
+)
+
+set "SETTINGS_DIR=%OPENCLAW_DIR%\settings"
+set "SKILLS_DIR=%OPENCLAW_DIR%\skills"
+set "SKILL_DIR=%SKILLS_DIR%\playwright-browser"
+
+echo [√] OpenClaw config directory: %OPENCLAW_DIR%
+echo.
+
+REM Step 3: Create directory structure
+echo [3/5] Preparing directory structure...
+
+if not exist "%OPENCLAW_DIR%" (
+    mkdir "%OPENCLAW_DIR%"
+    echo   [+] Created directory: %OPENCLAW_DIR%
+)
+
+if not exist "%SETTINGS_DIR%" (
+    mkdir "%SETTINGS_DIR%"
+    echo   [+] Created directory: %SETTINGS_DIR%
+)
+
+if not exist "%SKILLS_DIR%" (
+    mkdir "%SKILLS_DIR%"
+    echo   [+] Created directory: %SKILLS_DIR%
+)
+
+if not exist "%SKILL_DIR%" (
+    mkdir "%SKILL_DIR%"
+    echo   [+] Created directory: %SKILL_DIR%
+)
+
+echo [√] Directory structure ready
+echo.
+
+REM Step 4: Deploy Skill file
+echo [4/5] Deploying Skill file...
+
+set "SOURCE_FILE=skill-package\skills\playwright-browser.md"
+set "TARGET_FILE=%SKILL_DIR%\playwright-browser.md"
+
+copy /Y "%SOURCE_FILE%" "%TARGET_FILE%" >nul
+
+if exist "%TARGET_FILE%" (
+    echo [√] Skill file deployed
+    echo     Source file: %SOURCE_FILE%
+    echo     Target location: %TARGET_FILE%
+) else (
+    echo [X] Skill file deployment failed
+    exit /b 1
+)
+echo.
+
+REM Step 5: Configure MCP
+echo [5/5] Configuring MCP server...
+
+set "MCP_CONFIG_PATH=%SETTINGS_DIR%\mcp.json"
+set "DIST_PATH=%PROJECT_PATH%\dist\mcp-server.js"
+
+REM Escape backslashes in path for JSON
+set "DIST_PATH_JSON=%DIST_PATH:\=\\%"
+
+REM Create temporary configuration file
+set "TEMP_CONFIG=%TEMP%\mcp-config-%RANDOM%.json"
+
+(
+echo {
+echo   "mcpServers": {
+echo     "playwright-browser": {
+echo       "command": "node",
+echo       "args": ["%DIST_PATH_JSON%"],
+echo       "env": {},
+echo       "disabled": false,
+echo       "autoApprove": [
+echo         "browser_launch",
+echo         "browser_goto",
+echo         "browser_get_title",
+echo         "browser_get_text",
+echo         "browser_get_html",
+echo         "browser_get_links",
+echo         "browser_get_cookies",
+echo         "browser_close"
+echo       ]
+echo     }
+echo   }
+echo }
+) > "%TEMP_CONFIG%"
+
+REM If config file exists, backup
+if exist "%MCP_CONFIG_PATH%" (
+    echo   [!] Existing MCP configuration detected
+    
+    set "BACKUP_PATH=%MCP_CONFIG_PATH%.backup.%date:~0,4%%date:~5,2%%date:~8,2%-%time:~0,2%%time:~3,2%%time:~6,2%"
+    set "BACKUP_PATH=!BACKUP_PATH: =0!"
+    
+    copy /Y "%MCP_CONFIG_PATH%" "!BACKUP_PATH!" >nul
+    echo   [√] Backed up to: !BACKUP_PATH!
+    echo   [!] Will overwrite existing configuration (refer to backup for manual merge)
+)
+
+REM Write configuration
+copy /Y "%TEMP_CONFIG%" "%MCP_CONFIG_PATH%" >nul
+del "%TEMP_CONFIG%"
+
+echo [√] MCP configuration complete
+echo     Config file: %MCP_CONFIG_PATH%
+echo.
+
+REM Complete
+echo ========================================
+echo Deployment Complete!
+echo ========================================
+echo.
+
+echo Deployment Summary:
+echo   OpenClaw Config: %OPENCLAW_DIR%
+echo   Skill File: %TARGET_FILE%
+echo   MCP Config: %MCP_CONFIG_PATH%
+echo   MCP Server: %DIST_PATH%
+echo.
+
+echo Next Steps:
+echo   1. Restart OpenClaw/Kiro
+echo   2. Test in chat: 'Launch browser and visit example.com'
+echo   3. Check MCP server status (should show playwright-browser)
+echo.
+
+echo Usage:
+echo   Default deploy:  auto-deploy-en.cmd
+echo   Skip build:      auto-deploy-en.cmd --skip-build
+echo   Custom path:     auto-deploy-en.cmd --openclaw-path "C:\custom\path"
+echo.
+
+pause
