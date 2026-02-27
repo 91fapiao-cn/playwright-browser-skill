@@ -170,10 +170,32 @@ cp .kiro/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
 
 ## 💡 使用示例
 
+### 无头模式说明
+
+浏览器支持两种运行模式：
+
+**有界面模式（headless: false）** - 推荐用于调试和开发
+```javascript
+browser_launch({ "headless": false })  // 显示浏览器窗口
+```
+
+**无头模式（headless: true）** - 推荐用于生产环境和自动化
+```javascript
+browser_launch({ "headless": true })   // 后台运行，不显示窗口
+// 或者省略参数，默认为无头模式
+browser_launch()
+```
+
+**无头模式优势：**
+- ⚡ 更快的执行速度
+- 💾 更低的资源占用
+- 🔒 适合服务器环境
+- 🤖 适合批量自动化任务
+
 ### 基础网页访问
 
 ```javascript
-// 1. 启动浏览器
+// 1. 启动浏览器（有界面模式，便于观察）
 browser_launch({ "headless": false })
 
 // 2. 访问网页
@@ -189,10 +211,22 @@ browser_screenshot({ "path": "screenshot.png", "fullPage": true })
 browser_close()
 ```
 
+### 无头模式自动化示例
+
+```javascript
+// 无头模式运行，适合自动化任务
+browser_launch({ "headless": true })
+browser_goto({ "url": "https://example.com" })
+browser_get_title()
+browser_screenshot({ "path": "screenshot.png" })
+browser_close()
+```
+
 ### 表单填写
 
 ```javascript
-browser_launch()
+// 使用有界面模式便于调试
+browser_launch({ "headless": false })
 browser_goto({ "url": "https://example.com/login" })
 browser_fill({ "selector": "#username", "value": "user@example.com" })
 browser_fill({ "selector": "#password", "value": "password123" })
@@ -204,7 +238,8 @@ browser_close()
 ### 数据抓取
 
 ```javascript
-browser_launch()
+// 数据抓取推荐使用无头模式，速度更快
+browser_launch({ "headless": true })
 browser_goto({ "url": "https://example.com/products" })
 browser_count({ "selector": ".product-item" })
 browser_get_links()
@@ -237,6 +272,7 @@ npm run test:mcp
 
 ## 📖 文档
 
+- [配置指南](CONFIGURATION_GUIDE.md) - 无头模式、浏览器选项等详细配置说明
 - [自动部署指南](AUTO_DEPLOY_README.md) - 跨平台自动部署详细说明 | [English](AUTO_DEPLOY_README_EN.md)
 - [完整工具文档](.kiro/skills/playwright-browser.md) - 所有88个工具的详细说明
 - [Windows 使用指南](WINDOWS_GUIDE.md) - Windows 平台特定说明

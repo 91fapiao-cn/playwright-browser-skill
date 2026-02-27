@@ -170,10 +170,32 @@ Restart OpenClaw to load the new skill.
 
 ## 💡 Usage Examples
 
+### Headless Mode Explanation
+
+The browser supports two running modes:
+
+**Headed Mode (headless: false)** - Recommended for debugging and development
+```javascript
+browser_launch({ "headless": false })  // Show browser window
+```
+
+**Headless Mode (headless: true)** - Recommended for production and automation
+```javascript
+browser_launch({ "headless": true })   // Run in background, no window
+// Or omit parameter, defaults to headless mode
+browser_launch()
+```
+
+**Headless Mode Advantages:**
+- ⚡ Faster execution speed
+- 💾 Lower resource usage
+- 🔒 Suitable for server environments
+- 🤖 Ideal for batch automation tasks
+
 ### Basic Web Access
 
 ```javascript
-// 1. Launch browser
+// 1. Launch browser (headed mode for observation)
 browser_launch({ "headless": false })
 
 // 2. Visit webpage
@@ -189,10 +211,22 @@ browser_screenshot({ "path": "screenshot.png", "fullPage": true })
 browser_close()
 ```
 
+### Headless Mode Automation Example
+
+```javascript
+// Run in headless mode, suitable for automation tasks
+browser_launch({ "headless": true })
+browser_goto({ "url": "https://example.com" })
+browser_get_title()
+browser_screenshot({ "path": "screenshot.png" })
+browser_close()
+```
+
 ### Form Filling
 
 ```javascript
-browser_launch()
+// Use headed mode for easier debugging
+browser_launch({ "headless": false })
 browser_goto({ "url": "https://example.com/login" })
 browser_fill({ "selector": "#username", "value": "user@example.com" })
 browser_fill({ "selector": "#password", "value": "password123" })
@@ -204,7 +238,8 @@ browser_close()
 ### Data Scraping
 
 ```javascript
-browser_launch()
+// Headless mode recommended for data scraping, faster performance
+browser_launch({ "headless": true })
 browser_goto({ "url": "https://example.com/products" })
 browser_count({ "selector": ".product-item" })
 browser_get_links()
@@ -237,6 +272,7 @@ npm run test:mcp
 
 ## 📖 Documentation
 
+- [Configuration Guide](CONFIGURATION_GUIDE.md) - Detailed configuration for headless mode, browser options, etc.
 - [Auto-Deploy Guide](AUTO_DEPLOY_README_EN.md) - Cross-platform auto-deploy detailed instructions
 - [Complete Tool Documentation](.kiro/skills/playwright-browser.md) - Detailed description of all 88 tools
 - [Windows Usage Guide](WINDOWS_GUIDE.md) - Windows platform specific instructions
