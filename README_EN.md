@@ -333,14 +333,14 @@ Contributions welcome! Please see [Contributing Guide](CONTRIBUTING.md).
 
 ## 📝 Changelog
 
-### v2.1.0 (2024)
+### v2.1.0 (2026)
 - 🚀 Added cross-platform auto-deploy scripts
 - 🔍 Auto-detect OpenClaw/Kiro configuration paths
 - 💾 Auto-backup existing configurations
 - 📦 Support custom installation paths
 - 📚 Complete auto-deploy documentation
 
-### v2.0.0 (2024)
+### v2.0.0 (2026)
 - ✨ Added 88 complete browser operation tools
 - 📚 Complete Chinese documentation
 - 🪟 Full Windows platform support
