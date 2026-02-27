@@ -111,10 +111,10 @@ chmod +x auto-deploy.sh
 
 ```bash
 # Windows
-copy .kiro\skills\playwright-browser.md %USERPROFILE%\.openclaw\skills\playwright-browser\
+copy skill-package\skills\playwright-browser.md %USERPROFILE%\.openclaw\skills\playwright-browser\
 
 # macOS/Linux
-cp .kiro/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
 ```
 
 #### 2. 配置 MCP 服务器
@@ -166,7 +166,7 @@ cp .kiro/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
 - `browser_get_links` - 获取链接
 - 更多...
 
-[查看完整工具列表](.kiro/skills/playwright-browser.md)
+[查看完整工具列表](skill-package/skills/playwright-browser.md)
 
 ## 💡 使用示例
 
@@ -249,7 +249,7 @@ browser_evaluate({
 browser_close()
 ```
 
-[查看更多示例](.kiro/skills/playwright-browser.md#使用示例)
+[查看更多示例](skill-package/skills/playwright-browser.md#使用示例)
 
 ## 🧪 测试
 
@@ -274,7 +274,7 @@ npm run test:mcp
 
 - [配置指南](CONFIGURATION_GUIDE.md) - 无头模式、浏览器选项等详细配置说明
 - [自动部署指南](AUTO_DEPLOY_README.md) - 跨平台自动部署详细说明 | [English](AUTO_DEPLOY_README_EN.md)
-- [完整工具文档](.kiro/skills/playwright-browser.md) - 所有88个工具的详细说明
+- [完整工具文档](skill-package/skills/playwright-browser.md) - 所有88个工具的详细说明
 - [Windows 使用指南](WINDOWS_GUIDE.md) - Windows 平台特定说明
 - [快速开始指南](QUICK_START_WINDOWS.md) - 快速上手教程
 - [API 文档](API.md) - API 参考
@@ -290,7 +290,7 @@ playwright-browser-skill/
 │   ├── index.ts              # 核心功能实现
 │   ├── mcp-server.ts         # MCP 服务器
 │   └── tools-registry.ts     # 工具注册表
-├── .kiro/
+├── skill-package/
 │   ├── skills/
 │   │   └── playwright-browser.md  # 技能定义文件
 │   └── settings/

@@ -45,7 +45,7 @@ echo.
 REM 步骤 0：检查项目目录
 echo [0/5] 检查项目环境...
 
-if not exist ".kiro\skills\playwright-browser.md" (
+if not exist "skill-package\skills\playwright-browser.md" (
     echo [X] 错误：请在项目根目录运行此脚本
     echo     当前目录：%CD%
     exit /b 1
@@ -150,7 +150,7 @@ echo.
 REM 步骤 4：部署 Skill 文件
 echo [4/5] 部署 Skill 文件...
 
-set "SOURCE_FILE=.kiro\skills\playwright-browser.md"
+set "SOURCE_FILE=skill-package\skills\playwright-browser.md"
 set "TARGET_FILE=%SKILL_DIR%\playwright-browser.md"
 
 copy /Y "%SOURCE_FILE%" "%TARGET_FILE%" >nul

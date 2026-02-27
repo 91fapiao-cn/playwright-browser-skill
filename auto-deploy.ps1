@@ -56,7 +56,7 @@ function Ensure-Directory {
 # 步骤 0：检查项目目录
 Write-Host "[0/5] 检查项目环境..." -ForegroundColor Yellow
 
-if (-not (Test-Path ".kiro\skills\playwright-browser.md")) {
+if (-not (Test-Path "skill-package\skills\playwright-browser.md")) {
     Write-Host "[X] 错误：请在项目根目录运行此脚本" -ForegroundColor Red
     Write-Host "    当前目录：$(Get-Location)" -ForegroundColor Gray
     exit 1
@@ -130,7 +130,7 @@ Write-Host ""
 # 步骤 4：部署 Skill 文件
 Write-Host "[4/5] 部署 Skill 文件..." -ForegroundColor Yellow
 
-$sourceFile = ".kiro\skills\playwright-browser.md"
+$sourceFile = "skill-package\skills\playwright-browser.md"
 $targetFile = Join-Path $skillDir "playwright-browser.md"
 
 try {

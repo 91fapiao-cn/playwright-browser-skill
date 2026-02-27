@@ -7,7 +7,7 @@ console.log('   - src/index.ts (核心实现)');
 console.log('   - src/mcp-server.ts (MCP服务器)');
 console.log('   - src/tools-registry.ts (工具注册表)');
 console.log('   - src/tool-handlers.ts (工具处理器)');
-console.log('   - .kiro/skills/playwright-browser.md (Skill定义)');
+console.log('   - skill-package/skills/playwright-browser.md (Skill定义)');
 
 console.log('\n✅ 功能覆盖:');
 const categories = [

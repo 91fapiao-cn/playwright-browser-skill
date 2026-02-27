@@ -86,7 +86,7 @@ ensure_directory() {
 # 步骤 0：检查项目目录
 echo -e "${YELLOW}[0/5] 检查项目环境...${NC}"
 
-if [ ! -f ".kiro/skills/playwright-browser.md" ]; then
+if [ ! -f "skill-package/skills/playwright-browser.md" ]; then
     echo -e "${RED}[X] 错误：请在项目根目录运行此脚本${NC}"
     echo -e "${GRAY}    当前目录：$(pwd)${NC}"
     exit 1
@@ -155,7 +155,7 @@ echo ""
 # 步骤 4：部署 Skill 文件
 echo -e "${YELLOW}[4/5] 部署 Skill 文件...${NC}"
 
-SOURCE_FILE=".kiro/skills/playwright-browser.md"
+SOURCE_FILE="skill-package/skills/playwright-browser.md"
 TARGET_FILE="$SKILL_DIR/playwright-browser.md"
 
 cp "$SOURCE_FILE" "$TARGET_FILE"

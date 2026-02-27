@@ -111,10 +111,10 @@ If manual deployment is needed, follow these steps:
 
 ```bash
 # Windows
-copy .kiro\skills\playwright-browser.md %USERPROFILE%\.openclaw\skills\playwright-browser\
+copy skill-package\skills\playwright-browser.md %USERPROFILE%\.openclaw\skills\playwright-browser\
 
 # macOS/Linux
-cp .kiro/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
 ```
 
 #### 2. Configure MCP Server
@@ -166,7 +166,7 @@ Restart OpenClaw to load the new skill.
 - `browser_get_links` - Get links
 - More...
 
-[View Complete Tool List](.kiro/skills/playwright-browser.md)
+[View Complete Tool List](skill-package/skills/playwright-browser.md)
 
 ## 💡 Usage Examples
 
@@ -249,7 +249,7 @@ browser_evaluate({
 browser_close()
 ```
 
-[View More Examples](.kiro/skills/playwright-browser.md#usage-examples)
+[View More Examples](skill-package/skills/playwright-browser.md#usage-examples)
 
 ## 🧪 Testing
 
@@ -274,7 +274,7 @@ npm run test:mcp
 
 - [Configuration Guide](CONFIGURATION_GUIDE.md) - Detailed configuration for headless mode, browser options, etc.
 - [Auto-Deploy Guide](AUTO_DEPLOY_README_EN.md) - Cross-platform auto-deploy detailed instructions
-- [Complete Tool Documentation](.kiro/skills/playwright-browser.md) - Detailed description of all 88 tools
+- [Complete Tool Documentation](skill-package/skills/playwright-browser.md) - Detailed description of all 88 tools
 - [Windows Usage Guide](WINDOWS_GUIDE.md) - Windows platform specific instructions
 - [Quick Start Guide](QUICK_START_WINDOWS.md) - Quick start tutorial
 - [API Documentation](API.md) - API reference
@@ -290,7 +290,7 @@ playwright-browser-skill/
 │   ├── index.ts              # Core functionality
 │   ├── mcp-server.ts         # MCP server
 │   └── tools-registry.ts     # Tools registry
-├── .kiro/
+├── skill-package/
 │   ├── skills/
 │   │   └── playwright-browser.md  # Skill definition file
 │   └── settings/

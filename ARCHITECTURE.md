@@ -14,7 +14,7 @@
 │                           ↓                                 │
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │              Skill Definition                         │  │
-│  │  (.kiro/skills/playwright-browser.md)                 │  │
+│  │  (skill-package/skills/playwright-browser.md)                 │  │
 │  │  - 工具描述和使用说明                                  │  │
 │  │  - 参数说明和示例                                      │  │
 │  │  - 让AI理解如何使用浏览器工具                          │  │
@@ -55,7 +55,7 @@
 
 ### 1. Skill Definition Layer（OpenClaw侧）
 
-**文件**: `.kiro/skills/playwright-browser.md`
+**文件**: `skill-package/skills/playwright-browser.md`
 
 **职责**:
 - 📝 描述工具的功能和用途
@@ -193,7 +193,7 @@ npm run build
 # 将 mcp-config.json 内容添加到 ~/.openclaw/settings/mcp.json
 
 # 3. 复制 Skill 定义
-cp .kiro/skills/playwright-browser.md ~/.openclaw/skills/
+cp skill-package/skills/playwright-browser.md ~/.openclaw/skills/
 
 # 4. 重启 OpenClaw
 ```
@@ -272,7 +272,7 @@ CMD ["node", "dist/mcp-server.js"]
 1. 在 `index.ts` 中添加新方法
 2. 在 `mcp-server.ts` 中注册工具定义
 3. 在 `mcp-server.ts` 的 switch 中添加处理逻辑
-4. 更新 `.kiro/skills/playwright-browser.md` 文档
+4. 更新 `skill-package/skills/playwright-browser.md` 文档
 
 ### 添加新功能
 
