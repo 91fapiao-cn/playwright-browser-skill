@@ -45,18 +45,67 @@ npm run build
 
 ## 🚀 使用方法
 
-### 1. 部署到 OpenClaw
+### 一键自动部署（推荐）
 
-#### Windows 用户
+我们提供了跨平台的自动部署脚本，可以自动检测 OpenClaw 路径并完成所有配置：
+
+#### Windows (PowerShell) - 推荐
 
 ```powershell
-# 运行部署脚本
-.\deploy-skill.ps1
+# 完整部署（自动构建 + 部署）
+.\auto-deploy.ps1
+
+# 跳过构建（如果已构建）
+.\auto-deploy.ps1 -SkipBuild
+
+# 指定自定义路径
+.\auto-deploy.ps1 -OpenClawPath "C:\custom\path\.openclaw"
 ```
 
-#### 手动部署
+#### Windows (CMD)
 
-将技能文件复制到 OpenClaw 配置目录：
+```cmd
+REM 完整部署
+auto-deploy.cmd
+
+REM 跳过构建
+auto-deploy.cmd --skip-build
+
+REM 指定自定义路径
+auto-deploy.cmd --openclaw-path "C:\custom\path\.openclaw"
+```
+
+#### Mac/Linux
+
+```bash
+# 添加执行权限（首次使用）
+chmod +x auto-deploy.sh
+
+# 完整部署
+./auto-deploy.sh
+
+# 跳过构建
+./auto-deploy.sh --skip-build
+
+# 指定自定义路径
+./auto-deploy.sh --openclaw-path "/custom/path/.openclaw"
+```
+
+**自动部署功能：**
+- ✅ 自动检测 OpenClaw/Kiro 配置路径
+- ✅ 自动构建项目（可选跳过）
+- ✅ 自动部署 Skill 文件
+- ✅ 自动配置 MCP 服务器
+- ✅ 自动备份现有配置
+- ✅ 支持自定义安装路径
+
+📖 [查看详细部署文档](AUTO_DEPLOY_README.md)
+
+### 手动部署
+
+如果需要手动部署，请参考以下步骤：
+
+#### 1. 部署 Skill 文件
 
 ```bash
 # Windows
@@ -66,7 +115,7 @@ copy .kiro\skills\playwright-browser.md %USERPROFILE%\.openclaw\skills\playwrigh
 cp .kiro/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
 ```
 
-### 2. 配置 MCP 服务器
+#### 2. 配置 MCP 服务器
 
 在 `~/.openclaw/settings/mcp.json` 中添加：
 
@@ -83,7 +132,7 @@ cp .kiro/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
 }
 ```
 
-### 3. 重启 OpenClaw
+#### 3. 重启 OpenClaw
 
 重启 OpenClaw 以加载新的技能。
 
@@ -186,6 +235,7 @@ npm run test:mcp
 
 ## 📖 文档
 
+- [自动部署指南](AUTO_DEPLOY_README.md) - 跨平台自动部署详细说明
 - [完整工具文档](.kiro/skills/playwright-browser.md) - 所有88个工具的详细说明
 - [Windows 使用指南](WINDOWS_GUIDE.md) - Windows 平台特定说明
 - [快速开始指南](QUICK_START_WINDOWS.md) - 快速上手教程
@@ -235,6 +285,13 @@ npm run build
 欢迎贡献！请查看 [贡献指南](CONTRIBUTING.md)。
 
 ## 📝 更新日志
+
+### v2.1.0 (2024)
+- 🚀 新增跨平台自动部署脚本
+- 🔍 自动检测 OpenClaw/Kiro 配置路径
+- 💾 自动备份现有配置
+- 📦 支持自定义安装路径
+- 📚 完整的自动部署文档
 
 ### v2.0.0 (2024)
 - ✨ 新增 88 个完整的浏览器操作工具
