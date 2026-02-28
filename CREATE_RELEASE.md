@@ -7,7 +7,10 @@
 - 大小：9.41 MB
 - 位置：`D:\newSkill\releases\`
 
-⏳ Mac/Linux 发行版待生成（可选，如果你有 Mac/Linux 环境）
+✅ Mac/Linux 发行版已生成：
+- 文件：`releases/playwright-browser-skill-macos-linux-v2.1.0.tar.gz`
+- 大小：8.41 MB
+- 位置：`D:\newSkill\releases\`
 
 ## 创建 Release 步骤
 
@@ -60,14 +63,21 @@
    **注意：** 推荐使用 `.cmd` 文件，因为大部分 Windows 电脑默认禁止运行 PowerShell 脚本。
 
    ### Mac/Linux 用户
-   暂时请使用源码安装：
-   ```bash
-   git clone https://github.com/91fapiao-cn/playwright-browser-skill.git
-   cd playwright-browser-skill
-   npm install
-   npm run build
-   ./auto-deploy.sh
-   ```
+   下载 `playwright-browser-skill-macos-linux-v2.1.0.tar.gz`（8.41 MB）
+
+   **安装步骤：**
+   1. 解压文件：
+      ```bash
+      tar -xzf playwright-browser-skill-macos-linux-v2.1.0.tar.gz
+      cd playwright-browser-skill-macos-linux-v2.1.0
+      ```
+   2. 运行部署脚本：
+      ```bash
+      chmod +x auto-deploy.sh
+      ./auto-deploy.sh
+      ```
+   3. 重启 OpenClaw
+   4. 开始使用！
 
    ## 📖 文档
 
@@ -144,7 +154,9 @@
 
 4. **上传文件**
    - 在 "Attach binaries" 区域
-   - 拖拽或点击上传：`releases/playwright-browser-skill-windows-v2.1.0.zip`
+   - 拖拽或点击上传以下文件：
+     - `releases/playwright-browser-skill-windows-v2.1.0.zip`（Windows 版本）
+     - `releases/playwright-browser-skill-macos-linux-v2.1.0.tar.gz`（Mac/Linux 版本）
    - 等待上传完成
 
 5. **发布**
