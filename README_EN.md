@@ -49,7 +49,7 @@ npm run build
 
 ### One-Click Auto Deploy (Recommended)
 
-We provide cross-platform auto-deploy scripts in both Chinese and English that automatically detect OpenClaw paths and complete all configurations:
+We provide cross-platform auto-deploy scripts in both Chinese and English that automatically detect OpenClaw configuration paths and complete all configurations:
 
 #### Windows (PowerShell) - Recommended
 
