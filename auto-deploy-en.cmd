@@ -95,13 +95,10 @@ if defined OPENCLAW_PATH (
     echo   Using specified path: %OPENCLAW_PATH%
     set "OPENCLAW_DIR=%OPENCLAW_PATH%"
 ) else (
-    REM Check common paths
+    REM Check OpenClaw paths
     if exist "%USERPROFILE%\.openclaw" (
         set "OPENCLAW_DIR=%USERPROFILE%\.openclaw"
         echo [√] Found OpenClaw config directory: !OPENCLAW_DIR!
-    ) else if exist "%USERPROFILE%\.kiro" (
-        set "OPENCLAW_DIR=%USERPROFILE%\.kiro"
-        echo [√] Found Kiro config directory: !OPENCLAW_DIR!
     ) else if exist "%APPDATA%\openclaw" (
         set "OPENCLAW_DIR=%APPDATA%\openclaw"
         echo [√] Found OpenClaw config directory: !OPENCLAW_DIR!

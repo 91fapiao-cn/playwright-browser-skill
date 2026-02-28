@@ -15,12 +15,10 @@ Write-Host ""
 function Find-OpenClawPath {
     Write-Host "[*] 正在检测 OpenClaw 安装路径..." -ForegroundColor Yellow
     
-    # 常见的 OpenClaw 配置路径
+    # OpenClaw 配置路径
     $possiblePaths = @(
         "$env:USERPROFILE\.openclaw",           # Windows 默认
-        "$env:USERPROFILE\.kiro",               # Kiro 默认
         "$HOME/.openclaw",                       # Mac/Linux 默认
-        "$HOME/.kiro",                           # Kiro Mac/Linux
         "$env:APPDATA\openclaw",                # Windows AppData
         "$env:LOCALAPPDATA\openclaw"            # Windows LocalAppData
     )

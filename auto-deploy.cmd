@@ -95,13 +95,10 @@ if defined OPENCLAW_PATH (
     echo   使用指定路径：%OPENCLAW_PATH%
     set "OPENCLAW_DIR=%OPENCLAW_PATH%"
 ) else (
-    REM 检测常见路径
+    REM 检测 OpenClaw 路径
     if exist "%USERPROFILE%\.openclaw" (
         set "OPENCLAW_DIR=%USERPROFILE%\.openclaw"
         echo [√] 找到 OpenClaw 配置目录：!OPENCLAW_DIR!
-    ) else if exist "%USERPROFILE%\.kiro" (
-        set "OPENCLAW_DIR=%USERPROFILE%\.kiro"
-        echo [√] 找到 Kiro 配置目录：!OPENCLAW_DIR!
     ) else if exist "%APPDATA%\openclaw" (
         set "OPENCLAW_DIR=%APPDATA%\openclaw"
         echo [√] 找到 OpenClaw 配置目录：!OPENCLAW_DIR!

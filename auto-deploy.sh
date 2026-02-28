@@ -52,12 +52,10 @@ echo ""
 find_openclaw_path() {
     echo -e "${YELLOW}[*] 正在检测 OpenClaw 安装路径...${NC}"
     
-    # 常见的 OpenClaw 配置路径
+    # OpenClaw 配置路径
     local possible_paths=(
         "$HOME/.openclaw"
-        "$HOME/.kiro"
         "$HOME/Library/Application Support/openclaw"
-        "$HOME/Library/Application Support/kiro"
     )
     
     for path in "${possible_paths[@]}"; do
