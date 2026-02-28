@@ -124,11 +124,42 @@ $InstallGuide = @"
 
 ## 快速安装
 
-### 方法一：自动部署（推荐）
+### 方法一：双击运行（最简单，推荐）
+
+1. 解压此文件到任意目录
+2. 双击运行 ``auto-deploy.cmd``（中文版）
+3. 或双击运行 ``auto-deploy-en.cmd``（英文版）
+4. 重启 OpenClaw
+
+**推荐使用此方法**，因为大部分 Windows 电脑默认禁止运行 PowerShell 脚本。
+
+### 方法二：命令提示符
+
+1. 解压此文件到任意目录
+2. 在此目录打开命令提示符
+3. 运行部署脚本：
+
+``````cmd
+auto-deploy.cmd
+``````
+
+或使用英文版本：
+
+``````cmd
+auto-deploy-en.cmd
+``````
+
+### 方法三：PowerShell（需要执行策略权限）
 
 1. 解压此文件到任意目录
 2. 在此目录打开 PowerShell
-3. 运行部署脚本：
+3. 如果提示执行策略错误，先运行：
+
+``````powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+``````
+
+4. 然后运行部署脚本：
 
 ``````powershell
 .\auto-deploy.ps1
@@ -140,7 +171,7 @@ $InstallGuide = @"
 .\auto-deploy-en.ps1
 ``````
 
-### 方法二：手动部署
+### 方法四：手动部署
 
 1. 复制整个文件夹到：
    ``````
@@ -182,7 +213,7 @@ $InstallGuide = @"
 - ✅ 编译后的代码 (dist/)
 - ✅ 完整依赖包 (node_modules/)
 - ✅ 技能文档 (skill-package/)
-- ✅ 自动部署脚本
+- ✅ 自动部署脚本（.cmd 和 .ps1）
 - ✅ 完整文档
 
 ## 系统要求

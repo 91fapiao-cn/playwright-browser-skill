@@ -51,10 +51,13 @@
 
    **安装步骤：**
    1. 解压 ZIP 文件到任意目录
-   2. 打开 PowerShell，进入解压目录
-   3. 运行：`.\auto-deploy.ps1`
-   4. 重启 OpenClaw
-   5. 开始使用！
+   2. 双击运行 `auto-deploy.cmd`（推荐）
+      - 或者：打开命令提示符，运行 `auto-deploy.cmd`
+      - 或者：如果熟悉 PowerShell，运行 `.\auto-deploy.ps1`
+   3. 重启 OpenClaw
+   4. 开始使用！
+
+   **注意：** 推荐使用 `.cmd` 文件，因为大部分 Windows 电脑默认禁止运行 PowerShell 脚本。
 
    ### Mac/Linux 用户
    暂时请使用源码安装：

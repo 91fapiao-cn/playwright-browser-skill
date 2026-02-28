@@ -31,18 +31,33 @@
    - 选择"全部解压缩"
    - 解压到任意目录（例如：`D:\playwright-browser-skill\`）
 
-2. **运行部署脚本**
+2. **运行部署脚本（三种方式，任选其一）**
+
+   **方式一：双击运行（最简单，推荐）**
+   - 双击 `auto-deploy.cmd` 文件
+   - 或双击 `auto-deploy-en.cmd`（英文版）
+   
+   **方式二：命令提示符**
+   - 在解压目录中，按住 Shift 键，右键点击空白处
+   - 选择"在此处打开命令窗口"或"在此处打开 PowerShell 窗口"
+   - 运行命令：
+   ```cmd
+   auto-deploy.cmd
+   ```
+   
+   **方式三：PowerShell（需要执行策略权限）**
    - 在解压目录中，按住 Shift 键，右键点击空白处
    - 选择"在此处打开 PowerShell 窗口"
-   - 运行命令：
+   - 如果提示执行策略错误，先运行：
+   ```powershell
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   ```
+   - 然后运行：
    ```powershell
    .\auto-deploy.ps1
    ```
-   
-   或使用英文版本：
-   ```powershell
-   .\auto-deploy-en.ps1
-   ```
+
+   **推荐使用方式一或方式二**，因为大部分 Windows 电脑默认禁止运行 PowerShell 脚本。
 
 3. **重启 OpenClaw**
    - 完全关闭 OpenClaw
@@ -229,13 +244,33 @@ Download: `playwright-browser-skill-macos-linux-v2.1.0.tar.gz` (~9 MB)
    - Select "Extract All"
    - Extract to any directory (e.g., `D:\playwright-browser-skill\`)
 
-2. **Run Deployment Script**
+2. **Run Deployment Script (Choose one method)**
+
+   **Method 1: Double-click (Easiest, Recommended)**
+   - Double-click `auto-deploy-en.cmd` file
+   - Or double-click `auto-deploy.cmd` (Chinese version)
+   
+   **Method 2: Command Prompt**
+   - In the extracted directory, hold Shift and right-click in empty space
+   - Select "Open command window here" or "Open PowerShell window here"
+   - Run command:
+   ```cmd
+   auto-deploy-en.cmd
+   ```
+   
+   **Method 3: PowerShell (Requires execution policy permission)**
    - In the extracted directory, hold Shift and right-click in empty space
    - Select "Open PowerShell window here"
-   - Run command:
+   - If you get execution policy error, first run:
+   ```powershell
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   ```
+   - Then run:
    ```powershell
    .\auto-deploy-en.ps1
    ```
+
+   **Recommended: Use Method 1 or Method 2**, as most Windows computers block PowerShell scripts by default.
 
 3. **Restart OpenClaw**
    - Completely close OpenClaw

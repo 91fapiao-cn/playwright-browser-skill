@@ -37,9 +37,10 @@ A powerful browser automation skill built on Playwright, providing 101 complete 
 **Windows Users:**
 1. Download [playwright-browser-skill-windows-v2.1.0.zip](https://github.com/91fapiao-cn/playwright-browser-skill/releases)
 2. Extract to any directory
-3. Open PowerShell, navigate to extracted directory
-4. Run: `.\auto-deploy-en.ps1`
-5. Restart OpenClaw and start using!
+3. Double-click `auto-deploy-en.cmd` (recommended) or run `.\auto-deploy-en.ps1`
+4. Restart OpenClaw and start using!
+
+**Note:** Recommended to use `.cmd` file, as most Windows computers block PowerShell scripts by default.
 
 **Mac/Linux Users:**
 1. Download [playwright-browser-skill-macos-linux-v2.1.0.tar.gz](https://github.com/91fapiao-cn/playwright-browser-skill/releases)

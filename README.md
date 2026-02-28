@@ -37,9 +37,10 @@
 **Windows 用户：**
 1. 下载 [playwright-browser-skill-windows-v2.1.0.zip](https://github.com/91fapiao-cn/playwright-browser-skill/releases)
 2. 解压到任意目录
-3. 打开 PowerShell，进入解压目录
-4. 运行：`.\auto-deploy.ps1`
-5. 重启 OpenClaw，开始使用！
+3. 双击运行 `auto-deploy.cmd`（推荐）或 `auto-deploy.ps1`
+4. 重启 OpenClaw，开始使用！
+
+**注意：** 推荐使用 `.cmd` 文件，大部分 Windows 电脑默认禁止运行 PowerShell 脚本。
 
 **Mac/Linux 用户：**
 1. 下载 [playwright-browser-skill-macos-linux-v2.1.0.tar.gz](https://github.com/91fapiao-cn/playwright-browser-skill/releases)
