@@ -16,7 +16,10 @@
     "test:basic": "npm run build && node test/basic-test.js",
     "test:advanced": "npm run build && node test/advanced-test.js",
     "test:interaction": "npm run build && node test/interaction-test.js",
-    "test:mcp": "npm run build && node test/mcp-server-test.js"
+    "test:mcp": "npm run build && node test/mcp-server-test.js",
+    "build:release:windows": "powershell -ExecutionPolicy Bypass -File build-release.ps1",
+    "build:release:macos": "./build-release.sh",
+    "build:release:linux": "./build-release.sh"
   },
   "keywords": [
     "openclaw",

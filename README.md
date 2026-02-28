@@ -28,7 +28,33 @@
 - npm 或 yarn
 - Windows 10/11, macOS, 或 Linux
 
-### 快速开始
+### 安装方式
+
+#### 方式一：下载发行版（推荐，适合普通用户）
+
+**最简单的安装方式！** 下载预编译的独立包，无需构建，开箱即用。
+
+**Windows 用户：**
+1. 下载 [playwright-browser-skill-windows-v2.1.0.zip](https://github.com/91fapiao-cn/playwright-browser-skill/releases)
+2. 解压到任意目录
+3. 打开 PowerShell，进入解压目录
+4. 运行：`.\auto-deploy.ps1`
+5. 重启 OpenClaw，开始使用！
+
+**Mac/Linux 用户：**
+1. 下载 [playwright-browser-skill-macos-linux-v2.1.0.tar.gz](https://github.com/91fapiao-cn/playwright-browser-skill/releases)
+2. 解压：`tar -xzf playwright-browser-skill-macos-linux-v2.1.0.tar.gz`
+3. 进入目录并运行：`chmod +x auto-deploy.sh && ./auto-deploy.sh`
+4. 重启 OpenClaw，开始使用！
+
+**发行版优势：**
+- ✅ 无需 `npm install`，节省时间
+- ✅ 无需构建，开箱即用
+- ✅ 包含完整依赖，离线可用
+- ✅ 一键自动部署
+- ✅ 适合非开发者用户
+
+#### 方式二：从源码安装（适合开发者）
 
 ```bash
 # 克隆仓库

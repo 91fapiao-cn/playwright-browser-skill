@@ -28,7 +28,33 @@ A powerful browser automation skill built on Playwright, providing 101 complete 
 - npm or yarn
 - Windows 10/11, macOS, or Linux
 
-### Quick Start
+### Installation Methods
+
+#### Method 1: Download Release Package (Recommended for Regular Users)
+
+**The easiest way to install!** Download pre-compiled standalone packages, no build required, ready to use.
+
+**Windows Users:**
+1. Download [playwright-browser-skill-windows-v2.1.0.zip](https://github.com/91fapiao-cn/playwright-browser-skill/releases)
+2. Extract to any directory
+3. Open PowerShell, navigate to extracted directory
+4. Run: `.\auto-deploy-en.ps1`
+5. Restart OpenClaw and start using!
+
+**Mac/Linux Users:**
+1. Download [playwright-browser-skill-macos-linux-v2.1.0.tar.gz](https://github.com/91fapiao-cn/playwright-browser-skill/releases)
+2. Extract: `tar -xzf playwright-browser-skill-macos-linux-v2.1.0.tar.gz`
+3. Navigate and run: `chmod +x auto-deploy-en.sh && ./auto-deploy-en.sh`
+4. Restart OpenClaw and start using!
+
+**Release Package Advantages:**
+- ✅ No `npm install` required, saves time
+- ✅ No build required, ready to use
+- ✅ Includes complete dependencies, works offline
+- ✅ One-click auto-deploy
+- ✅ Perfect for non-developer users
+
+#### Method 2: Install from Source (For Developers)
 
 ```bash
 # Clone repository
