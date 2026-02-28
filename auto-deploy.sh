@@ -183,6 +183,16 @@ echo -e "${GRAY}    [*] 复制所有依赖（这可能需要一些时间）...${
 cp -r "node_modules" "$NODE_MODULES_TARGET"
 
 echo -e "${GREEN}  [√] 运行时依赖已部署${NC}"
+
+# 4.4 复制 package.json
+echo -e "${GRAY}  [*] 复制 package.json...${NC}"
+if [ -f "package.json" ]; then
+    cp "package.json" "$SKILL_DIR/package.json"
+    echo -e "${GREEN}  [√] package.json 已部署${NC}"
+else
+    echo -e "${YELLOW}  [!] package.json 不存在（不影响功能）${NC}"
+fi
+
 echo -e "${GREEN}[√] 独立技能包部署完成${NC}"
 echo ""
 

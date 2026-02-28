@@ -175,6 +175,22 @@ try {
     exit 1
 }
 
+# 4.4 Copy package.json
+try {
+    Write-Host "  [*] Copying package.json..." -ForegroundColor Gray
+    $packageJsonSource = "package.json"
+    $packageJsonTarget = Join-Path $skillDir "package.json"
+    
+    if (Test-Path $packageJsonSource) {
+        Copy-Item $packageJsonSource $packageJsonTarget -Force
+        Write-Host "  [√] package.json deployed" -ForegroundColor Green
+    } else {
+        Write-Host "  [!] package.json not found (does not affect functionality)" -ForegroundColor Yellow
+    }
+} catch {
+    Write-Host "  [!] package.json deployment failed (does not affect functionality)" -ForegroundColor Yellow
+}
+
 Write-Host "[√] Standalone skill package deployment complete" -ForegroundColor Green
 Write-Host ""
 

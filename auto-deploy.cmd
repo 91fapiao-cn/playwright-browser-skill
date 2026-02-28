@@ -188,7 +188,15 @@ xcopy /E /I /Y /Q "node_modules" "%NODE_MODULES_TARGET%" >nul
 
 echo   [√] 运行时依赖已部署
 
-echo   [√] 运行时依赖已部署
+REM 4.4 复制 package.json
+echo   [*] 复制 package.json...
+copy /Y "package.json" "%SKILL_DIR%\package.json" >nul
+if exist "%SKILL_DIR%\package.json" (
+    echo   [√] package.json 已部署
+) else (
+    echo   [!] package.json 部署失败（不影响功能）
+)
+
 echo [√] 独立技能包部署完成
 echo.
 

@@ -175,6 +175,22 @@ try {
     exit 1
 }
 
+# 4.4 复制 package.json
+try {
+    Write-Host "  [*] 复制 package.json..." -ForegroundColor Gray
+    $packageJsonSource = "package.json"
+    $packageJsonTarget = Join-Path $skillDir "package.json"
+    
+    if (Test-Path $packageJsonSource) {
+        Copy-Item $packageJsonSource $packageJsonTarget -Force
+        Write-Host "  [√] package.json 已部署" -ForegroundColor Green
+    } else {
+        Write-Host "  [!] package.json 不存在（不影响功能）" -ForegroundColor Yellow
+    }
+} catch {
+    Write-Host "  [!] package.json 部署失败（不影响功能）" -ForegroundColor Yellow
+}
+
 Write-Host "[√] 独立技能包部署完成" -ForegroundColor Green
 Write-Host ""
 

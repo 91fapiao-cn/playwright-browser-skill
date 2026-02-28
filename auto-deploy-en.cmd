@@ -187,6 +187,16 @@ echo     [*] Copying all dependencies (this may take a moment)...
 xcopy /E /I /Y /Q "node_modules" "%NODE_MODULES_TARGET%" >nul
 
 echo   [√] Runtime dependencies deployed
+
+REM 4.4 Copy package.json
+echo   [*] Copying package.json...
+copy /Y "package.json" "%SKILL_DIR%\package.json" >nul
+if exist "%SKILL_DIR%\package.json" (
+    echo   [√] package.json deployed
+) else (
+    echo   [!] package.json deployment failed (does not affect functionality)
+)
+
 echo [√] Standalone skill package deployment complete
 echo.
 

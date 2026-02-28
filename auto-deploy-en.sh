@@ -183,6 +183,16 @@ echo -e "${GRAY}    [*] Copying all dependencies (this may take a moment)...${NC
 cp -r "node_modules" "$NODE_MODULES_TARGET"
 
 echo -e "${GREEN}  [√] Runtime dependencies deployed${NC}"
+
+# 4.4 Copy package.json
+echo -e "${GRAY}  [*] Copying package.json...${NC}"
+if [ -f "package.json" ]; then
+    cp "package.json" "$SKILL_DIR/package.json"
+    echo -e "${GREEN}  [√] package.json deployed${NC}"
+else
+    echo -e "${YELLOW}  [!] package.json not found (does not affect functionality)${NC}"
+fi
+
 echo -e "${GREEN}[√] Standalone skill package deployment complete${NC}"
 echo ""
 
