@@ -305,7 +305,7 @@ echo -e "  ${NC}✅ Multi-version support - Install different versions simultane
 echo ""
 
 echo -e "${YELLOW}Next Steps:${NC}"
-echo -e "  ${NC}1. Restart OpenClaw/Kiro${NC}"
+echo -e "  ${NC}1. Restart OpenClaw${NC}"
 echo -e "  ${NC}2. Test in chat: 'Launch browser and visit example.com'${NC}"
 echo -e "  ${NC}3. Check MCP server status (should show playwright-browser)${NC}"
 echo ""

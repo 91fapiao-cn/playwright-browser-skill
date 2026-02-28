@@ -103,7 +103,7 @@ chmod +x auto-deploy-en.sh auto-deploy.sh
 ```
 
 **Auto-Deploy Features:**
-- ✅ Auto-detect OpenClaw/Kiro configuration paths
+- ✅ Auto-detect OpenClaw configuration paths
 - ✅ Auto-build project (optional skip)
 - ✅ Auto-deploy Skill files
 - ✅ Auto-configure MCP servers
@@ -336,7 +336,7 @@ Contributions welcome! Please see [Contributing Guide](CONTRIBUTING.md).
 
 ### v2.1.0 (2026)
 - 🚀 Added cross-platform auto-deploy scripts
-- 🔍 Auto-detect OpenClaw/Kiro configuration paths
+- 🔍 Auto-detect OpenClaw configuration paths
 - 💾 Auto-backup existing configurations
 - 📦 Support custom installation paths
 - 📚 Complete auto-deploy documentation

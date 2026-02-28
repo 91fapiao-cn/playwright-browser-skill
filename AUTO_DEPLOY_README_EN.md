@@ -1,6 +1,6 @@
 # Auto-Deploy Scripts Usage Guide
 
-This project provides three auto-deploy scripts that automatically detect OpenClaw/Kiro configuration paths and complete the full deployment.
+This project provides three auto-deploy scripts that automatically detect OpenClaw configuration paths and complete the full deployment.
 
 ## Script List
 
@@ -12,7 +12,7 @@ This project provides three auto-deploy scripts that automatically detect OpenCl
 
 ## Features
 
-✅ Auto-detect OpenClaw/Kiro configuration paths  
+✅ Auto-detect OpenClaw configuration paths  
 ✅ Auto-build project (optional skip)  
 ✅ Auto-create necessary directory structure  
 ✅ Auto-deploy Skill files  
@@ -75,7 +75,7 @@ chmod +x auto-deploy.sh
 
 ## Auto Path Detection
 
-Scripts will automatically detect OpenClaw/Kiro configuration paths in the following order:
+Scripts will automatically detect OpenClaw configuration paths in the following order:
 
 ### Windows
 1. `%USERPROFILE%\.openclaw`
@@ -118,7 +118,7 @@ Backup file format: `mcp.json.backup.YYYYMMDD-HHMMSS`
 
 After deployment completes, you need to:
 
-1. **Restart OpenClaw/Kiro**
+1. **Restart OpenClaw**
 2. **Verify MCP Server Status**
    - Open MCP server panel
    - Confirm `playwright-browser` shows as connected

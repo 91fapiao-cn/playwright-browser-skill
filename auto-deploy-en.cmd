@@ -312,7 +312,7 @@ echo   ✅ Multi-version support - Install different versions simultaneously
 echo.
 
 echo Next Steps:
-echo   1. Restart OpenClaw/Kiro
+echo   1. Restart OpenClaw
 echo   2. Test in chat: 'Launch browser and visit example.com'
 echo   3. Check MCP server status (should show playwright-browser)
 echo.

@@ -103,7 +103,7 @@ chmod +x auto-deploy.sh auto-deploy-en.sh
 ```
 
 **自动部署功能：**
-- ✅ 自动检测 OpenClaw/Kiro 配置路径
+- ✅ 自动检测 OpenClaw 配置路径
 - ✅ 自动构建项目（可选跳过）
 - ✅ 自动部署 Skill 文件
 - ✅ 自动配置 MCP 服务器
@@ -336,7 +336,7 @@ npm run build
 
 ### v2.1.0 (2026)
 - 🚀 新增跨平台自动部署脚本
-- 🔍 自动检测 OpenClaw/Kiro 配置路径
+- 🔍 自动检测 OpenClaw 配置路径
 - 💾 自动备份现有配置
 - 📦 支持自定义安装路径
 - 📚 完整的自动部署文档

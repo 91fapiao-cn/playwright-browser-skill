@@ -62,7 +62,7 @@ chmod +x auto-deploy-en.sh
 
 这将：
 1. 构建项目
-2. 自动检测 OpenClaw/Kiro 配置路径
+2. 自动检测 OpenClaw 配置路径
 3. 部署 Skill 文件
 4. 配置 MCP 服务器
 5. 备份现有配置
@@ -143,7 +143,7 @@ cp skill-package/skills/playwright-browser.md ~/.openclaw/skills/playwright-brow
 
 **注意：** 将 `/path/to/playwright-browser-skill` 替换为实际的项目路径。
 
-#### 4. 重启 OpenClaw/Kiro
+#### 4. 重启 OpenClaw
 
 ```bash
 # 如果使用 systemd
@@ -184,7 +184,7 @@ Playwright Browser MCP Server v2.1 已启动
 
 #### 3. 在 OpenClaw 中测试
 
-启动 OpenClaw/Kiro，在聊天中输入：
+启动 OpenClaw，在聊天中输入：
 
 ```
 启动浏览器并访问 example.com
@@ -472,7 +472,7 @@ chmod +x auto-deploy.sh
 
 This will:
 1. Build the project
-2. Auto-detect OpenClaw/Kiro configuration path
+2. Auto-detect OpenClaw configuration path
 3. Deploy Skill file
 4. Configure MCP server
 5. Backup existing configuration
@@ -553,7 +553,7 @@ Edit `~/.openclaw/settings/mcp.json`:
 
 **Note:** Replace `/path/to/playwright-browser-skill` with the actual project path.
 
-#### 4. Restart OpenClaw/Kiro
+#### 4. Restart OpenClaw
 
 ```bash
 # If using systemd
@@ -594,7 +594,7 @@ Press `Ctrl+C` to stop the test.
 
 #### 3. Test in OpenClaw
 
-Start OpenClaw/Kiro and type in chat:
+Start OpenClaw and type in chat:
 
 ```
 Launch browser and visit example.com

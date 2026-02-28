@@ -305,7 +305,7 @@ echo -e "  ${NC}✅ 支持多版本 - 可同时安装不同版本${NC}"
 echo ""
 
 echo -e "${YELLOW}下一步：${NC}"
-echo -e "  ${NC}1. 重启 OpenClaw/Kiro${NC}"
+echo -e "  ${NC}1. 重启 OpenClaw${NC}"
 echo -e "  ${NC}2. 在聊天中测试：'启动浏览器并访问 example.com'${NC}"
 echo -e "  ${NC}3. 查看 MCP 服务器状态（应显示 playwright-browser）${NC}"
 echo ""

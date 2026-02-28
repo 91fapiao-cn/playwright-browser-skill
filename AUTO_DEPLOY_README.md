@@ -1,6 +1,6 @@
 # 自动部署脚本使用指南
 
-本项目提供了三个自动部署脚本，可以自动检测 OpenClaw/Kiro 配置路径并完成完整部署。
+本项目提供了三个自动部署脚本，可以自动检测 OpenClaw 配置路径并完成完整部署。
 
 [English Version](AUTO_DEPLOY_README_EN.md)
 
@@ -14,7 +14,7 @@
 
 ## 功能特性
 
-✅ 自动检测 OpenClaw/Kiro 配置路径  
+✅ 自动检测 OpenClaw 配置路径  
 ✅ 自动构建项目（可选跳过）  
 ✅ 自动创建必要的目录结构  
 ✅ 自动部署 Skill 文件  
@@ -77,7 +77,7 @@ chmod +x auto-deploy.sh
 
 ## 自动检测路径
 
-脚本会按以下顺序自动检测 OpenClaw/Kiro 配置路径：
+脚本会按以下顺序自动检测 OpenClaw 配置路径：
 
 ### Windows
 1. `%USERPROFILE%\.openclaw`
@@ -120,7 +120,7 @@ chmod +x auto-deploy.sh
 
 部署完成后，需要：
 
-1. **重启 OpenClaw/Kiro**
+1. **重启 OpenClaw**
 2. **验证 MCP 服务器状态**
    - 打开 MCP 服务器面板
    - 确认 `playwright-browser` 显示为已连接

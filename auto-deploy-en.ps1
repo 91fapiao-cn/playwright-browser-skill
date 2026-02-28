@@ -303,7 +303,7 @@ Write-Host "  ✅ Multi-version support - Install different versions simultaneou
 Write-Host ""
 
 Write-Host "Next Steps:" -ForegroundColor Yellow
-Write-Host "  1. Restart OpenClaw/Kiro" -ForegroundColor White
+Write-Host "  1. Restart OpenClaw" -ForegroundColor White
 Write-Host "  2. Test in chat: 'Launch browser and visit example.com'" -ForegroundColor White
 Write-Host "  3. Check MCP server status (should show playwright-browser)" -ForegroundColor White
 Write-Host ""

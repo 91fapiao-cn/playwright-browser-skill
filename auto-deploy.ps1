@@ -303,7 +303,7 @@ Write-Host "  ✅ 支持多版本 - 可同时安装不同版本" -ForegroundColo
 Write-Host ""
 
 Write-Host "下一步：" -ForegroundColor Yellow
-Write-Host "  1. 重启 OpenClaw/Kiro" -ForegroundColor White
+Write-Host "  1. 重启 OpenClaw" -ForegroundColor White
 Write-Host "  2. 在聊天中测试：'启动浏览器并访问 example.com'" -ForegroundColor White
 Write-Host "  3. 查看 MCP 服务器状态（应显示 playwright-browser）" -ForegroundColor White
 Write-Host ""
