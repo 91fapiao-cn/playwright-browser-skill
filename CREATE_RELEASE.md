@@ -28,11 +28,12 @@
    
    **Release title（发布标题）：**
    ```
-   v2.1.0 - 独立发行版首发 🎉
+   v2.1.0 - 独立发行版首发 🎉 / Standalone Release 🎉
    ```
 
    **Description（发布说明）：**
-   ```markdown
+   
+   复制 `RELEASE_NOTES_TEMPLATE.md` 文件的完整内容（包含中英文双语说明）
    # Playwright Browser Skill v2.1.0
 
    ## 🎉 重大更新
