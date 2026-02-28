@@ -147,6 +147,22 @@ Add to `~/.openclaw/settings/mcp.json`:
 
 Restart OpenClaw to load the new skill.
 
+#### 4. Enable Skill in OpenClaw
+
+After restarting, type in OpenClaw chat:
+
+```
+Please use Playwright Browser Skill to access the internet and control browsers
+```
+
+Or test directly:
+
+```
+Use Playwright Browser Skill to launch browser and visit example.com
+```
+
+This tells OpenClaw to use this skill for all browser-related tasks.
+
 ## 📚 Tool List
 
 ### Browser Management (8 tools)

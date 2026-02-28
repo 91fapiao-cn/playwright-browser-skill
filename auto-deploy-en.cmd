@@ -313,8 +313,10 @@ echo.
 
 echo Next Steps:
 echo   1. Restart OpenClaw
-echo   2. Test in chat: 'Launch browser and visit example.com'
-echo   3. Check MCP server status (should show playwright-browser)
+echo   2. Tell OpenClaw in chat:
+echo      'Please use Playwright Browser Skill to access the internet and control browsers'
+echo   3. Test: 'Use Playwright Browser Skill to launch browser and visit example.com'
+echo   4. Check MCP server status (should show playwright-browser)
 echo.
 
 echo Usage:

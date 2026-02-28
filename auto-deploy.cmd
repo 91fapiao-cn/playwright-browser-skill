@@ -315,8 +315,10 @@ echo.
 
 echo 下一步：
 echo   1. 重启 OpenClaw
-echo   2. 在聊天中测试：'启动浏览器并访问 example.com'
-echo   3. 查看 MCP 服务器状态（应显示 playwright-browser）
+echo   2. 在对话中告诉 OpenClaw：
+echo      '请使用 Playwright Browser Skill 技能来访问互联网和控制浏览器'
+echo   3. 测试：'使用 Playwright Browser Skill 启动浏览器并访问 example.com'
+echo   4. 查看 MCP 服务器状态（应显示 playwright-browser）
 echo.
 
 echo 使用说明：

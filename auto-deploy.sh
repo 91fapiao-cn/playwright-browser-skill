@@ -306,8 +306,10 @@ echo ""
 
 echo -e "${YELLOW}下一步：${NC}"
 echo -e "  ${NC}1. 重启 OpenClaw${NC}"
-echo -e "  ${NC}2. 在聊天中测试：'启动浏览器并访问 example.com'${NC}"
-echo -e "  ${NC}3. 查看 MCP 服务器状态（应显示 playwright-browser）${NC}"
+echo -e "  ${NC}2. 在对话中告诉 OpenClaw：${NC}"
+echo -e "  ${CYAN}   '请使用 Playwright Browser Skill 技能来访问互联网和控制浏览器'${NC}"
+echo -e "  ${NC}3. 测试：'使用 Playwright Browser Skill 启动浏览器并访问 example.com'${NC}"
+echo -e "  ${NC}4. 查看 MCP 服务器状态（应显示 playwright-browser）${NC}"
 echo ""
 
 echo -e "${CYAN}使用说明：${NC}"

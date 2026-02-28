@@ -304,8 +304,10 @@ Write-Host ""
 
 Write-Host "下一步：" -ForegroundColor Yellow
 Write-Host "  1. 重启 OpenClaw" -ForegroundColor White
-Write-Host "  2. 在聊天中测试：'启动浏览器并访问 example.com'" -ForegroundColor White
-Write-Host "  3. 查看 MCP 服务器状态（应显示 playwright-browser）" -ForegroundColor White
+Write-Host "  2. 在对话中告诉 OpenClaw：" -ForegroundColor White
+Write-Host "     '请使用 Playwright Browser Skill 技能来访问互联网和控制浏览器'" -ForegroundColor Cyan
+Write-Host "  3. 测试：'使用 Playwright Browser Skill 启动浏览器并访问 example.com'" -ForegroundColor White
+Write-Host "  4. 查看 MCP 服务器状态（应显示 playwright-browser）" -ForegroundColor White
 Write-Host ""
 
 Write-Host "使用说明：" -ForegroundColor Cyan

@@ -147,6 +147,22 @@ cp skill-package/skills/playwright-browser.md ~/.openclaw/skills/playwright-brow
 
 重启 OpenClaw 以加载新的技能。
 
+#### 4. 在 OpenClaw 中启用技能
+
+重启后，在 OpenClaw 对话中输入：
+
+```
+请使用 Playwright Browser Skill 技能来访问互联网和控制浏览器
+```
+
+或者直接测试：
+
+```
+使用 Playwright Browser Skill 启动浏览器并访问 example.com
+```
+
+这样 OpenClaw 就会知道使用这个技能来处理所有浏览器相关的任务。
+
 ## 📚 工具列表
 
 ### 浏览器管理 (8个)

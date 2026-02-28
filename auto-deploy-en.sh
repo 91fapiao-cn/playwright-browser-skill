@@ -306,8 +306,10 @@ echo ""
 
 echo -e "${YELLOW}Next Steps:${NC}"
 echo -e "  ${NC}1. Restart OpenClaw${NC}"
-echo -e "  ${NC}2. Test in chat: 'Launch browser and visit example.com'${NC}"
-echo -e "  ${NC}3. Check MCP server status (should show playwright-browser)${NC}"
+echo -e "  ${NC}2. Tell OpenClaw in chat:${NC}"
+echo -e "  ${CYAN}   'Please use Playwright Browser Skill to access the internet and control browsers'${NC}"
+echo -e "  ${NC}3. Test: 'Use Playwright Browser Skill to launch browser and visit example.com'${NC}"
+echo -e "  ${NC}4. Check MCP server status (should show playwright-browser)${NC}"
 echo ""
 
 echo -e "${CYAN}Usage:${NC}"

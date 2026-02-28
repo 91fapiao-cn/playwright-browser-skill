@@ -304,8 +304,10 @@ Write-Host ""
 
 Write-Host "Next Steps:" -ForegroundColor Yellow
 Write-Host "  1. Restart OpenClaw" -ForegroundColor White
-Write-Host "  2. Test in chat: 'Launch browser and visit example.com'" -ForegroundColor White
-Write-Host "  3. Check MCP server status (should show playwright-browser)" -ForegroundColor White
+Write-Host "  2. Tell OpenClaw in chat:" -ForegroundColor White
+Write-Host "     'Please use Playwright Browser Skill to access the internet and control browsers'" -ForegroundColor Cyan
+Write-Host "  3. Test: 'Use Playwright Browser Skill to launch browser and visit example.com'" -ForegroundColor White
+Write-Host "  4. Check MCP server status (should show playwright-browser)" -ForegroundColor White
 Write-Host ""
 
 Write-Host "Usage:" -ForegroundColor Cyan
