@@ -193,7 +193,7 @@ npm run build
 # 将 mcp-config.json 内容添加到 ~/.openclaw/settings/mcp.json
 
 # 3. 复制 Skill 定义
-cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser-skill/
 
 # 4. 重启 OpenClaw
 ```

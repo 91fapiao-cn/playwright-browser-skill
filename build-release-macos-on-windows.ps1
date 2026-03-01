@@ -149,7 +149,7 @@ chmod +x auto-deploy-en.sh
 
 1. 复制整个文件夹到：
    ``````
-   ~/.openclaw/skills/playwright-browser/
+   ~/.openclaw/skills/playwright-browser-skill/
    ``````
 
 2. 编辑配置文件：
@@ -163,7 +163,7 @@ chmod +x auto-deploy-en.sh
      "mcpServers": {
        "playwright-browser": {
          "command": "node",
-         "args": ["/Users/你的用户名/.openclaw/skills/playwright-browser/dist/mcp-server.js"],
+         "args": ["/Users/你的用户名/.openclaw/skills/playwright-browser-skill/dist/mcp-server.js"],
          "disabled": false
        }
      }

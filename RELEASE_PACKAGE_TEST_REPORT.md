@@ -224,7 +224,7 @@ Playwright Browser MCP Server v2.1 已启动
 这是 OpenClaw 识别技能的唯一标准：
 
 - ✅ 文件名正确：`SKILL.md`（不是 playwright-browser.md）
-- ✅ 文件位置正确：`~/.openclaw/skills/playwright-browser/SKILL.md`
+- ✅ 文件位置正确：`~/.openclaw/skills/playwright-browser-skill/SKILL.md`
 - ✅ 文件内容正确：包含 front matter 和完整文档
 - ✅ 文件大小正确：29,296 字节
 

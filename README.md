@@ -150,7 +150,7 @@ chmod +x auto-deploy.sh auto-deploy-en.sh
 copy skill-package\skills\SKILL.md %USERPROFILE%\.openclaw\skills\playwright-browser\
 
 # macOS/Linux
-cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser-skill/
 ```
 
 #### 2. 配置 MCP 服务器

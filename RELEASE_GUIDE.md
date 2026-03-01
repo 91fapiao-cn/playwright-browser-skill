@@ -163,12 +163,12 @@ xattr -cr playwright-browser-skill-macos-linux-v2.1.0
 
 **Windows:**
 ```
-C:\Users\你的用户名\.openclaw\skills\playwright-browser\
+C:\Users\你的用户名\.openclaw\skills\playwright-browser-skill\
 ```
 
 **Mac/Linux:**
 ```
-~/.openclaw/skills/playwright-browser/
+~/.openclaw/skills/playwright-browser-skill/
 ```
 
 然后从 `~/.openclaw/settings/mcp.json` 中删除 `playwright-browser` 配置。
@@ -370,12 +370,12 @@ Old version files can be safely deleted.
 
 **Windows:**
 ```
-C:\Users\YourUsername\.openclaw\skills\playwright-browser\
+C:\Users\YourUsername\.openclaw\skills\playwright-browser-skill\
 ```
 
 **Mac/Linux:**
 ```
-~/.openclaw/skills/playwright-browser/
+~/.openclaw/skills/playwright-browser-skill/
 ```
 
 Then remove `playwright-browser` configuration from `~/.openclaw/settings/mcp.json`.

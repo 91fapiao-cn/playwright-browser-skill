@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "playwright-browser": {
+      "command": "node",
+      "args": [
+        "C:/Users/Administrator/.openclaw/skills/playwright-browser-skill/dist/mcp-server.js"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "playwright_navigate",
+        "playwright_click",
+        "playwright_type",
+        "playwright_screenshot",
+        "playwright_get_content",
+        "playwright_wait",
+        "playwright_scroll",
+        "playwright_select",
+        "playwright_hover",
+        "playwright_press_key"
+      ]
+    }
+  }
+}

@@ -319,7 +319,7 @@ OpenClaw 会：
 - [ ] `openclaw.json` 中的路径正确
 - [ ] 或 `mcp.json` 中的路径正确（如果不使用 openclaw.json）
 - [ ] 路径指向当前部署目录，不是备份目录
-- [ ] `SKILL.md` 文件存在于 `~/.openclaw/skills/playwright-browser/`
+- [ ] `SKILL.md` 文件存在于 `~/.openclaw/skills/playwright-browser-skill/`
 
 ### 步骤 2：重启 OpenClaw
 

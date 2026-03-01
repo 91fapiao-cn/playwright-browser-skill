@@ -109,7 +109,7 @@ $openclawDir = if ($OpenClawPath) {
 
 $settingsDir = Join-Path $openclawDir "settings"
 $skillsDir = Join-Path $openclawDir "skills"
-$skillDir = Join-Path $skillsDir "playwright-browser"
+$skillDir = Join-Path $skillsDir "playwright-browser-skill"
 
 Write-Host "[√] OpenClaw 配置目录：$openclawDir" -ForegroundColor Green
 Write-Host ""

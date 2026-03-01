@@ -113,7 +113,7 @@ if defined OPENCLAW_PATH (
 
 set "SETTINGS_DIR=%OPENCLAW_DIR%\settings"
 set "SKILLS_DIR=%OPENCLAW_DIR%\skills"
-set "SKILL_DIR=%SKILLS_DIR%\playwright-browser"
+set "SKILL_DIR=%SKILLS_DIR%\playwright-browser-skill"
 
 echo [√] OpenClaw 配置目录：%OPENCLAW_DIR%
 echo.

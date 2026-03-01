@@ -134,7 +134,7 @@ fi
 
 SETTINGS_DIR="$OPENCLAW_DIR/settings"
 SKILLS_DIR="$OPENCLAW_DIR/skills"
-SKILL_DIR="$SKILLS_DIR/playwright-browser"
+SKILL_DIR="$SKILLS_DIR/playwright-browser-skill"
 
 echo -e "${GREEN}[√] OpenClaw config directory: $OPENCLAW_DIR${NC}"
 echo ""

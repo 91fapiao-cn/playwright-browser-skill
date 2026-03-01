@@ -184,8 +184,8 @@ sudo ./auto-deploy.sh
 
 ### Skill 文件
 ```
-Windows: %USERPROFILE%\.openclaw\skills\playwright-browser\SKILL.md
-Mac/Linux: ~/.openclaw/skills/playwright-browser/SKILL.md
+Windows: %USERPROFILE%\.openclaw\skills\playwright-browser-skill\SKILL.md
+Mac/Linux: ~/.openclaw/skills/playwright-browser-skill/SKILL.md
 ```
 
 ### MCP 配置

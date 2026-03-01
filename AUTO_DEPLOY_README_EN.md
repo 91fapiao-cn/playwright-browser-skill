@@ -182,8 +182,8 @@ After deployment, you can manually verify the following files:
 
 ### Skill File
 ```
-Windows: %USERPROFILE%\.openclaw\skills\playwright-browser\SKILL.md
-Mac/Linux: ~/.openclaw/skills/playwright-browser/SKILL.md
+Windows: %USERPROFILE%\.openclaw\skills\playwright-browser-skill\SKILL.md
+Mac/Linux: ~/.openclaw/skills/playwright-browser-skill/SKILL.md
 ```
 
 ### MCP Configuration

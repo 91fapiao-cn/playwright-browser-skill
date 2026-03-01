@@ -238,7 +238,7 @@ copy skill-package\skills\SKILL.md %USERPROFILE%\.openclaw\skills\playwright-bro
 
 **Mac/Linux：**
 ```bash
-cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser-skill/
 ```
 
 ### 3. 重启 OpenClaw

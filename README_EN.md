@@ -150,7 +150,7 @@ If manual deployment is needed, follow these steps:
 copy skill-package\skills\SKILL.md %USERPROFILE%\.openclaw\skills\playwright-browser\
 
 # macOS/Linux
-cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser-skill/
 ```
 
 #### 2. Configure MCP Server

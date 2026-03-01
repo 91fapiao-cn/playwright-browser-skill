@@ -148,10 +148,10 @@ copy skill-package\skills\SKILL.md %USERPROFILE%\.openclaw\skills\playwright-bro
 
 ### 7.2 Mac/Linux 命令 ✅
 ```bash
-cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser-skill/
 ```
 - [x] 源路径正确：`skill-package/skills/SKILL.md`
-- [x] 目标路径正确：`~/.openclaw/skills/playwright-browser/`
+- [x] 目标路径正确：`~/.openclaw/skills/playwright-browser-skill/`
 - [x] 路径格式正确
 
 ---
