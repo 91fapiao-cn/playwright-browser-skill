@@ -309,9 +309,42 @@ if "%ALL_OK%"=="1" (
 echo.
 
 REM 步骤 7：统计信息
-echo [7/7] 统计信息...
+echo [7/9] 统计信息...
 echo   工具总数：101 个
 echo   覆盖率：88%%
+echo.
+
+REM 步骤 8：启动 MCP 服务器
+echo [8/9] 启动 MCP 服务器...
+
+REM 创建启动脚本
+set "STARTUP_SCRIPT=%SKILL_DIR%\start-mcp-server.cmd"
+(
+echo @echo off
+echo title Playwright Browser MCP Server
+echo echo Playwright Browser MCP Server
+echo echo 按 Ctrl+C 停止服务器
+echo echo 此窗口可以最小化，但请勿关闭
+echo echo.
+echo cd /d "%SKILL_DIR%"
+echo node dist\mcp-server.js
+) > "%STARTUP_SCRIPT%"
+
+echo   [√] 已创建启动脚本：%STARTUP_SCRIPT%
+
+REM 在最小化窗口中启动 MCP 服务器
+start /min cmd /c "%STARTUP_SCRIPT%"
+timeout /t 3 /nobreak >nul
+
+echo   [√] MCP 服务器已启动
+echo.
+
+REM 步骤 9：配置自动启动
+echo [9/9] 配置自动启动...
+
+REM 使用 PowerShell 创建计划任务
+powershell -Command "$action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c \"%STARTUP_SCRIPT%\"'; $trigger = New-ScheduledTaskTrigger -AtLogOn -User '%USERNAME%'; $principal = New-ScheduledTaskPrincipal -UserId '%USERNAME%' -LogonType Interactive -RunLevel Highest; $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable; try { Unregister-ScheduledTask -TaskName 'Playwright Browser MCP Server' -Confirm:$false -ErrorAction SilentlyContinue; Register-ScheduledTask -TaskName 'Playwright Browser MCP Server' -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description '用户登录时自动启动 Playwright Browser MCP Server' | Out-Null; Write-Host '  [√] 自动启动已配置（Windows 任务计划程序）' -ForegroundColor Green } catch { Write-Host '  [!] 自动启动配置失败' -ForegroundColor Yellow }"
+
 echo.
 
 REM 完成
@@ -326,6 +359,7 @@ echo   独立技能包：%SKILL_DIR%
 echo   Skill 文档：%TARGET_FILE%
 echo   MCP 配置：%MCP_CONFIG_PATH%
 echo   MCP 服务器：%DIST_PATH%
+echo   启动脚本：%STARTUP_SCRIPT%
 echo.
 
 echo ✨ 独立包特性：
@@ -333,24 +367,23 @@ echo   ✅ 完全自包含 - 不依赖项目源代码
 echo   ✅ 可直接分享 - 打包整个文件夹即可
 echo   ✅ 易于管理 - 所有文件在一个位置
 echo   ✅ 支持多版本 - 可同时安装不同版本
+echo   ✅ 开机自启动 - MCP 服务器自动启动
+echo.
+
+echo 🚀 MCP 服务器状态：
+echo   ✅ MCP 服务器已启动
 echo.
 
 echo 下一步：
-echo   1. 重启 OpenClaw
+echo   1. 重启 OpenClaw（或它会自动检测 MCP 服务器）
 echo   2. 在对话中告诉 OpenClaw：
 echo      '请使用 Playwright Browser Skill 技能来访问互联网和控制浏览器'
 echo   3. 测试：'使用 Playwright Browser Skill 启动浏览器并访问 example.com'
-echo   4. 查看 MCP 服务器状态（应显示 playwright-browser）
 echo.
-echo ⚠️ 配置提示：
-echo   如果 OpenClaw 无法识别技能，可能是 openclaw.json 中有旧配置
-echo   解决方法：
-echo   1. 打开 %USERPROFILE%\.openclaw\openclaw.json
-echo   2. 查找 "playwright-browser" 配置
-echo   3. 确保路径正确（不包含 "backup" 字样）
-echo   4. 或删除该配置，让 OpenClaw 使用 mcp.json
-echo.
-echo   详细说明请查看：OPENCLAW_MCP_GUIDE.md
+
+echo 管理命令：
+echo   启动 MCP：  "%STARTUP_SCRIPT%"
+echo   停止 MCP：  taskkill /F /FI "WINDOWTITLE eq Playwright Browser MCP Server*"
 echo.
 
 echo 使用说明：

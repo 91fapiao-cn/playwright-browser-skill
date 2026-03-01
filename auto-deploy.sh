@@ -288,9 +288,129 @@ fi
 echo ""
 
 # 步骤 7：统计信息
-echo -e "${YELLOW}[7/7] 统计信息...${NC}"
+echo -e "${YELLOW}[7/9] 统计信息...${NC}"
 echo -e "${GRAY}  工具总数：101 个${NC}"
 echo -e "${GRAY}  覆盖率：88%${NC}"
+echo ""
+
+# 步骤 8：启动 MCP 服务器
+echo -e "${YELLOW}[8/9] 启动 MCP 服务器...${NC}"
+
+# 检查 MCP 服务器是否已在运行
+MCP_RUNNING=false
+if pgrep -f "node.*mcp-server.js" > /dev/null; then
+    MCP_PID=$(pgrep -f "node.*mcp-server.js")
+    echo -e "${YELLOW}  [!] MCP 服务器已在运行 (PID: $MCP_PID)${NC}"
+    MCP_RUNNING=true
+fi
+
+if [ "$MCP_RUNNING" = false ]; then
+    echo -e "${GRAY}  [*] 正在启动 MCP 服务器...${NC}"
+    
+    # 创建启动脚本
+    STARTUP_SCRIPT="$SKILL_DIR/start-mcp-server.sh"
+    cat > "$STARTUP_SCRIPT" << 'SCRIPT_EOF'
+#!/bin/bash
+echo "Playwright Browser MCP Server"
+echo "按 Ctrl+C 停止服务器"
+echo "此终端可以最小化，但请勿关闭"
+echo ""
+cd "$(dirname "$0")"
+node dist/mcp-server.js
+SCRIPT_EOF
+    
+    chmod +x "$STARTUP_SCRIPT"
+    echo -e "${GRAY}  [√] 已创建启动脚本：$STARTUP_SCRIPT${NC}"
+    
+    # 启动 MCP 服务器
+    if command -v osascript &> /dev/null; then
+        # macOS：使用 osascript 在新的最小化终端中打开
+        osascript -e "tell application \"Terminal\" to do script \"$STARTUP_SCRIPT\"" -e "tell application \"Terminal\" to set miniaturized of window 1 to true" &> /dev/null &
+    else
+        # Linux：使用 nohup 在后台启动
+        nohup "$STARTUP_SCRIPT" > "$SKILL_DIR/mcp-server.log" 2>&1 &
+    fi
+    
+    # 等待服务器启动
+    sleep 3
+    
+    # 验证启动
+    if pgrep -f "node.*mcp-server.js" > /dev/null; then
+        MCP_PID=$(pgrep -f "node.*mcp-server.js")
+        echo -e "${GREEN}  [√] MCP 服务器启动成功 (PID: $MCP_PID)${NC}"
+    else
+        echo -e "${YELLOW}  [!] MCP 服务器可能还在启动中...${NC}"
+    fi
+else
+    echo -e "${GREEN}  [√] MCP 服务器已在运行${NC}"
+fi
+echo ""
+
+# 步骤 9：配置自动启动
+echo -e "${YELLOW}[9/9] 配置自动启动...${NC}"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS：创建 LaunchAgent
+    PLIST_PATH="$HOME/Library/LaunchAgents/com.playwright-browser-mcp.plist"
+    
+    cat > "$PLIST_PATH" << PLIST_EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.playwright-browser-mcp</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$STARTUP_SCRIPT</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <false/>
+    <key>StandardOutPath</key>
+    <string>$SKILL_DIR/mcp-server.log</string>
+    <key>StandardErrorPath</key>
+    <string>$SKILL_DIR/mcp-server-error.log</string>
+</dict>
+</plist>
+PLIST_EOF
+    
+    echo -e "${GREEN}  [√] 自动启动已配置（LaunchAgent）${NC}"
+    echo -e "${GRAY}      Plist：$PLIST_PATH${NC}"
+    echo -e "${GRAY}      触发器：用户登录时${NC}"
+    
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux：创建 systemd 用户服务
+    SYSTEMD_DIR="$HOME/.config/systemd/user"
+    mkdir -p "$SYSTEMD_DIR"
+    
+    SERVICE_PATH="$SYSTEMD_DIR/playwright-browser-mcp.service"
+    
+    cat > "$SERVICE_PATH" << SERVICE_EOF
+[Unit]
+Description=Playwright Browser MCP Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=$STARTUP_SCRIPT
+Restart=on-failure
+StandardOutput=append:$SKILL_DIR/mcp-server.log
+StandardError=append:$SKILL_DIR/mcp-server-error.log
+
+[Install]
+WantedBy=default.target
+SERVICE_EOF
+    
+    # 启用服务
+    systemctl --user enable playwright-browser-mcp.service &> /dev/null || true
+    
+    echo -e "${GREEN}  [√] 自动启动已配置（systemd）${NC}"
+    echo -e "${GRAY}      服务：$SERVICE_PATH${NC}"
+    echo -e "${GRAY}      触发器：用户登录时${NC}"
+    echo -e "${GRAY}      启用：systemctl --user enable playwright-browser-mcp.service${NC}"
+fi
 echo ""
 
 # 完成
@@ -305,6 +425,7 @@ echo -e "  ${NC}独立技能包：$SKILL_DIR${NC}"
 echo -e "  ${NC}Skill 文档：$TARGET_FILE${NC}"
 echo -e "  ${NC}MCP 配置：$MCP_CONFIG_PATH${NC}"
 echo -e "  ${NC}MCP 服务器：$DIST_PATH${NC}"
+echo -e "  ${NC}启动脚本：$STARTUP_SCRIPT${NC}"
 echo ""
 
 echo -e "${CYAN}✨ 独立包特性：${NC}"
@@ -312,25 +433,29 @@ echo -e "  ${NC}✅ 完全自包含 - 不依赖项目源代码${NC}"
 echo -e "  ${NC}✅ 可直接分享 - 打包整个文件夹即可${NC}"
 echo -e "  ${NC}✅ 易于管理 - 所有文件在一个位置${NC}"
 echo -e "  ${NC}✅ 支持多版本 - 可同时安装不同版本${NC}"
+echo -e "  ${NC}✅ 开机自启动 - MCP 服务器自动启动${NC}"
+echo ""
+
+echo -e "${CYAN}🚀 MCP 服务器状态：${NC}"
+if pgrep -f "node.*mcp-server.js" > /dev/null; then
+    MCP_PID=$(pgrep -f "node.*mcp-server.js")
+    echo -e "  ${GREEN}✅ MCP 服务器正在运行 (PID: $MCP_PID)${NC}"
+else
+    echo -e "  ${YELLOW}⚠️  MCP 服务器未运行${NC}"
+fi
 echo ""
 
 echo -e "${YELLOW}下一步：${NC}"
-echo -e "  ${NC}1. 重启 OpenClaw${NC}"
+echo -e "  ${NC}1. 重启 OpenClaw（或它会自动检测 MCP 服务器）${NC}"
 echo -e "  ${NC}2. 在对话中告诉 OpenClaw：${NC}"
 echo -e "  ${CYAN}   '请使用 Playwright Browser Skill 技能来访问互联网和控制浏览器'${NC}"
 echo -e "  ${NC}3. 测试：'使用 Playwright Browser Skill 启动浏览器并访问 example.com'${NC}"
-echo -e "  ${NC}4. 查看 MCP 服务器状态（应显示 playwright-browser）${NC}"
 echo ""
 
-echo -e "${YELLOW}⚠️ 配置提示：${NC}"
-echo -e "  ${NC}如果 OpenClaw 无法识别技能，可能是 openclaw.json 中有旧配置${NC}"
-echo -e "  ${NC}解决方法：${NC}"
-echo -e "  ${GRAY}1. 打开 ~/.openclaw/openclaw.json${NC}"
-echo -e "  ${GRAY}2. 查找 'playwright-browser' 配置${NC}"
-echo -e "  ${GRAY}3. 确保路径正确（不包含 'backup' 字样）${NC}"
-echo -e "  ${GRAY}4. 或删除该配置，让 OpenClaw 使用 mcp.json${NC}"
-echo ""
-echo -e "  ${CYAN}详细说明请查看：OPENCLAW_MCP_GUIDE.md${NC}"
+echo -e "${CYAN}管理命令：${NC}"
+echo -e "${GRAY}  启动 MCP：  $STARTUP_SCRIPT${NC}"
+echo -e "${GRAY}  停止 MCP：  pkill -f 'node.*mcp-server.js'${NC}"
+echo -e "${GRAY}  检查状态：  pgrep -f 'node.*mcp-server.js'${NC}"
 echo ""
 
 echo -e "${CYAN}使用说明：${NC}"

@@ -2,13 +2,77 @@
 name: playwright-browser
 description: 浏览器自动化技能，支持101个工具：页面导航、元素交互、内容提取、截图、网络控制、性能监控等
 version: 2.1.0
+mcp:
+  command: node
+  args:
+    - dist/mcp-server.js
 ---
 
 # Playwright Browser Skill - 浏览器自动化技能
 
-这是一个强大的浏览器自动化技能，可以帮助你控制浏览器、访问网页、提取内容、截图等。通过 MCP 协议提供 101 个完整的浏览器操作工具。
+## ⚡ AI 调用指南（OpenClaw 必读）
 
-## 🚀 快速开始
+### 如何调用 MCP 工具
+
+当用户请求浏览器操作时，你需要通过 MCP 协议调用相应的工具。以下是调用方法：
+
+#### 基本调用流程
+
+1. **启动浏览器** → 调用 `browser_launch`
+2. **访问网页** → 调用 `browser_goto`
+3. **执行操作** → 调用相应工具（点击、填写、提取等）
+4. **关闭浏览器** → 调用 `browser_close`
+
+#### 常用工具快速参考
+
+| 用户需求 | 调用工具 | 参数示例 |
+|---------|---------|---------|
+| "访问网站" | `browser_goto` | `{ "url": "https://example.com" }` |
+| "点击按钮" | `browser_click` | `{ "selector": "button.submit" }` |
+| "填写表单" | `browser_fill` | `{ "selector": "#username", "value": "admin" }` |
+| "获取标题" | `browser_get_title` | `{}` |
+| "截图" | `browser_screenshot` | `{ "path": "screenshot.png", "fullPage": true }` |
+| "获取文本" | `browser_get_text` | `{ "selector": "h1" }` |
+| "等待元素" | `browser_wait_for_selector` | `{ "selector": ".content" }` |
+
+#### 完整示例：访问网页并获取标题
+
+```
+用户："访问 example.com 并获取页面标题"
+
+你应该调用：
+1. browser_launch({ "headless": false })
+2. browser_goto({ "url": "https://example.com" })
+3. browser_get_title({})
+4. browser_close({})
+```
+
+#### 完整示例：搜索操作
+
+```
+用户："在百度搜索 OpenClaw"
+
+你应该调用：
+1. browser_launch({})
+2. browser_goto({ "url": "https://www.baidu.com" })
+3. browser_fill({ "selector": "#kw", "value": "OpenClaw" })
+4. browser_click({ "selector": "#su" })
+5. browser_wait_for_selector({ "selector": ".result" })
+6. browser_close({})
+```
+
+#### 重要提示
+
+- ✅ **必须先调用 browser_launch** - 任何操作前都要先启动浏览器
+- ✅ **使用完毕调用 browser_close** - 释放资源
+- ✅ **等待元素加载** - 使用 browser_wait_for_selector 确保元素存在
+- ✅ **选择器语法** - 使用 CSS 选择器（#id, .class, button[type="submit"]）
+
+---
+
+## 🚀 用户使用指南
+
+这是一个强大的浏览器自动化技能，可以帮助你控制浏览器、访问网页、提取内容、截图等。通过 MCP 协议提供 101 个完整的浏览器操作工具。
 
 ### 如何使用这个技能
 

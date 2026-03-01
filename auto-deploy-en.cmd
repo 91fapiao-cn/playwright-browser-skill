@@ -314,6 +314,39 @@ echo   Total tools: 101
 echo   Coverage: 88%%
 echo.
 
+REM Step 8: Start MCP Server
+echo [8/9] Starting MCP Server...
+
+REM Create startup script
+set "STARTUP_SCRIPT=%SKILL_DIR%\start-mcp-server.cmd"
+(
+echo @echo off
+echo title Playwright Browser MCP Server
+echo echo Playwright Browser MCP Server
+echo echo Press Ctrl+C to stop server
+echo echo This window can be minimized but do not close
+echo echo.
+echo cd /d "%SKILL_DIR%"
+echo node dist\mcp-server.js
+) > "%STARTUP_SCRIPT%"
+
+echo   [√] Created startup script: %STARTUP_SCRIPT%
+
+REM Start MCP server in minimized window
+start /min cmd /c "%STARTUP_SCRIPT%"
+timeout /t 3 /nobreak >nul
+
+echo   [√] MCP Server started
+echo.
+
+REM Step 9: Setup Auto-start
+echo [9/9] Setting up auto-start...
+
+REM Create scheduled task using PowerShell
+powershell -Command "$action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c \"%STARTUP_SCRIPT%\"'; $trigger = New-ScheduledTaskTrigger -AtLogOn -User '%USERNAME%'; $principal = New-ScheduledTaskPrincipal -UserId '%USERNAME%' -LogonType Interactive -RunLevel Highest; $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable; try { Unregister-ScheduledTask -TaskName 'Playwright Browser MCP Server' -Confirm:$false -ErrorAction SilentlyContinue; Register-ScheduledTask -TaskName 'Playwright Browser MCP Server' -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description 'Auto-start Playwright Browser MCP Server on login' | Out-Null; Write-Host '  [√] Auto-start configured (Windows Task Scheduler)' -ForegroundColor Green } catch { Write-Host '  [!] Auto-start setup failed' -ForegroundColor Yellow }"
+
+echo.
+
 REM Complete
 echo ========================================
 echo Deployment Complete!
@@ -326,6 +359,7 @@ echo   Standalone Package: %SKILL_DIR%
 echo   Skill Documentation: %TARGET_FILE%
 echo   MCP Config: %MCP_CONFIG_PATH%
 echo   MCP Server: %DIST_PATH%
+echo   Startup Script: %STARTUP_SCRIPT%
 echo.
 
 echo ✨ Standalone Package Features:
@@ -333,24 +367,23 @@ echo   ✅ Fully self-contained - No dependency on project source
 echo   ✅ Directly shareable - Just package the entire folder
 echo   ✅ Easy to manage - All files in one location
 echo   ✅ Multi-version support - Install different versions simultaneously
+echo   ✅ Auto-start on login - MCP server starts automatically
+echo.
+
+echo 🚀 MCP Server Status:
+echo   ✅ MCP Server has been started
 echo.
 
 echo Next Steps:
-echo   1. Restart OpenClaw
+echo   1. Restart OpenClaw (or it will auto-detect MCP server)
 echo   2. Tell OpenClaw in chat:
 echo      'Please use Playwright Browser Skill to access the internet and control browsers'
 echo   3. Test: 'Use Playwright Browser Skill to launch browser and visit example.com'
-echo   4. Check MCP server status (should show playwright-browser)
 echo.
-echo ⚠️ Configuration Note:
-echo   If OpenClaw cannot recognize the skill, there may be old config in openclaw.json
-echo   Solution:
-echo   1. Open %USERPROFILE%\.openclaw\openclaw.json
-echo   2. Find "playwright-browser" configuration
-echo   3. Ensure path is correct (no "backup" in path)
-echo   4. Or remove that config to let OpenClaw use mcp.json
-echo.
-echo   For details, see: OPENCLAW_MCP_GUIDE.md
+
+echo Management Commands:
+echo   Start MCP:   "%STARTUP_SCRIPT%"
+echo   Stop MCP:    taskkill /F /FI "WINDOWTITLE eq Playwright Browser MCP Server*"
 echo.
 
 echo Usage:

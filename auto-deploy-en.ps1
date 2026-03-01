@@ -297,6 +297,94 @@ Write-Host "  Total tools: 101" -ForegroundColor Gray
 Write-Host "  Coverage: 88%" -ForegroundColor Gray
 Write-Host ""
 
+# Step 8: Start MCP Server
+Write-Host "[8/9] Starting MCP Server..." -ForegroundColor Yellow
+
+# Check if MCP server is already running
+$mcpRunning = $false
+Get-Process node -ErrorAction SilentlyContinue | ForEach-Object {
+    $cmdLine = (Get-WmiObject Win32_Process -Filter "ProcessId = $($_.Id)").CommandLine
+    if ($cmdLine -like "*mcp-server.js*") {
+        $mcpRunning = $true
+        Write-Host "  [!] MCP Server is already running (PID: $($_.Id))" -ForegroundColor Yellow
+    }
+}
+
+if (-not $mcpRunning) {
+    Write-Host "  [*] Starting MCP Server..." -ForegroundColor Gray
+    
+    # Start MCP server in a new minimized window
+    $startCmd = "cd '$skillDir'; `$host.UI.RawUI.WindowTitle = 'Playwright Browser MCP Server'; Write-Host 'Playwright Browser MCP Server' -ForegroundColor Cyan; Write-Host 'Press Ctrl+C to stop server' -ForegroundColor Yellow; Write-Host 'This window can be minimized but do not close' -ForegroundColor Yellow; Write-Host ''; node dist\mcp-server.js"
+    
+    Start-Process PowerShell -ArgumentList "-ExecutionPolicy Bypass -NoExit -Command `"$startCmd`"" -WindowStyle Minimized
+    
+    # Wait for server to start
+    Start-Sleep -Seconds 3
+    
+    # Verify startup
+    $mcpStarted = $false
+    Get-Process node -ErrorAction SilentlyContinue | ForEach-Object {
+        $cmdLine = (Get-WmiObject Win32_Process -Filter "ProcessId = $($_.Id)").CommandLine
+        if ($cmdLine -like "*mcp-server.js*") {
+            $mcpStarted = $true
+            Write-Host "  [√] MCP Server started successfully (PID: $($_.Id))" -ForegroundColor Green
+        }
+    }
+    
+    if (-not $mcpStarted) {
+        Write-Host "  [!] MCP Server may still be starting..." -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "  [√] MCP Server is already running" -ForegroundColor Green
+}
+Write-Host ""
+
+# Step 9: Setup Auto-start
+Write-Host "[9/9] Setting up auto-start..." -ForegroundColor Yellow
+
+try {
+    # Create startup script
+    $startupScriptPath = Join-Path $skillDir "start-mcp-server.ps1"
+    $startupScript = @"
+# Auto-start script for Playwright Browser MCP Server
+`$host.UI.RawUI.WindowTitle = 'Playwright Browser MCP Server'
+Write-Host 'Playwright Browser MCP Server' -ForegroundColor Cyan
+Write-Host 'Press Ctrl+C to stop server' -ForegroundColor Yellow
+Write-Host 'This window can be minimized but do not close' -ForegroundColor Yellow
+Write-Host ''
+Set-Location '$skillDir'
+node dist\mcp-server.js
+"@
+    
+    $startupScript | Set-Content $startupScriptPath -Encoding UTF8
+    Write-Host "  [√] Created startup script: $startupScriptPath" -ForegroundColor Gray
+    
+    # Create scheduled task for auto-start
+    $taskName = "Playwright Browser MCP Server"
+    $taskExists = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+    
+    if ($taskExists) {
+        Write-Host "  [!] Scheduled task already exists, updating..." -ForegroundColor Yellow
+        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
+    }
+    
+    $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -WindowStyle Minimized -File `"$startupScriptPath`""
+    $trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+    $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Highest
+    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+    
+    Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "Auto-start Playwright Browser MCP Server on login" | Out-Null
+    
+    Write-Host "  [√] Auto-start configured (Windows Task Scheduler)" -ForegroundColor Green
+    Write-Host "      Task Name: $taskName" -ForegroundColor Gray
+    Write-Host "      Trigger: At user login" -ForegroundColor Gray
+    
+} catch {
+    Write-Host "  [!] Auto-start setup failed: $_" -ForegroundColor Yellow
+    Write-Host "      You can manually start MCP server using: $startupScriptPath" -ForegroundColor Gray
+}
+Write-Host ""
+
 # Complete
 Write-Host "========================================" -ForegroundColor Green
 Write-Host "Deployment Complete!" -ForegroundColor Green
@@ -309,6 +397,7 @@ Write-Host "  Standalone Package: $skillDir" -ForegroundColor White
 Write-Host "  Skill Documentation: $targetFile" -ForegroundColor White
 Write-Host "  MCP Config: $mcpConfigPath" -ForegroundColor White
 Write-Host "  MCP Server: $distPath" -ForegroundColor White
+Write-Host "  Startup Script: $startupScriptPath" -ForegroundColor White
 Write-Host ""
 
 Write-Host "✨ Standalone Package Features:" -ForegroundColor Cyan
@@ -316,14 +405,34 @@ Write-Host "  ✅ Fully self-contained - No dependency on project source" -Foreg
 Write-Host "  ✅ Directly shareable - Just package the entire folder" -ForegroundColor White
 Write-Host "  ✅ Easy to manage - All files in one location" -ForegroundColor White
 Write-Host "  ✅ Multi-version support - Install different versions simultaneously" -ForegroundColor White
+Write-Host "  ✅ Auto-start on login - MCP server starts automatically" -ForegroundColor White
+Write-Host ""
+
+Write-Host "🚀 MCP Server Status:" -ForegroundColor Cyan
+$mcpFound = $false
+Get-Process node -ErrorAction SilentlyContinue | ForEach-Object {
+    $cmdLine = (Get-WmiObject Win32_Process -Filter "ProcessId = $($_.Id)").CommandLine
+    if ($cmdLine -like "*mcp-server.js*") {
+        $mcpFound = $true
+        Write-Host "  ✅ MCP Server is running (PID: $($_.Id))" -ForegroundColor Green
+    }
+}
+if (-not $mcpFound) {
+    Write-Host "  ⚠️  MCP Server is not running" -ForegroundColor Yellow
+}
 Write-Host ""
 
 Write-Host "Next Steps:" -ForegroundColor Yellow
-Write-Host "  1. Restart OpenClaw" -ForegroundColor White
+Write-Host "  1. Restart OpenClaw (or it will auto-detect MCP server)" -ForegroundColor White
 Write-Host "  2. Tell OpenClaw in chat:" -ForegroundColor White
 Write-Host "     'Please use Playwright Browser Skill to access the internet and control browsers'" -ForegroundColor Cyan
 Write-Host "  3. Test: 'Use Playwright Browser Skill to launch browser and visit example.com'" -ForegroundColor White
-Write-Host "  4. Check MCP server status (should show playwright-browser)" -ForegroundColor White
+Write-Host ""
+
+Write-Host "Management Commands:" -ForegroundColor Cyan
+Write-Host "  Start MCP:   PowerShell -File `"$startupScriptPath`"" -ForegroundColor Gray
+Write-Host "  Stop MCP:    Get-Process node | Where-Object {(Get-WmiObject Win32_Process -Filter `"ProcessId = `$(`$_.Id)`").CommandLine -like '*mcp-server*'} | Stop-Process" -ForegroundColor Gray
+Write-Host "  Check Status: Get-Process node | Where-Object {(Get-WmiObject Win32_Process -Filter `"ProcessId = `$(`$_.Id)`").CommandLine -like '*mcp-server*'}" -ForegroundColor Gray
 Write-Host ""
 
 Write-Host "Usage:" -ForegroundColor Cyan

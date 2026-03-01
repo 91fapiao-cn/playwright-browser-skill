@@ -1,0 +1,35 @@
+﻿# MCP 服务器诊断报告
+
+生成时间: 2026-03-01 16:10:11
+
+## 环境信息
+- Node.js 版本: v22.22.0
+- 操作系统: 
+- PowerShell 版本: 5.1.26100.7705
+
+## 文件检查
+- Skill 目录: ✓ 存在
+- MCP 服务器: ✓ 存在
+- SKILL.md: ✓ 存在
+- mcp.json: ✓ 存在
+
+## 配置检查
+- MCP 配置路径: C:\Users\Administrator\.openclaw\settings\mcp.json
+- MCP 服务器路径: C:\Users\Administrator\.openclaw\skills\playwright-browser-skill\dist\mcp-server.js
+- disabled 状态: False
+
+## MCP 服务器测试
+输出:
+Playwright Browser MCP Server v2.1 已启动 已注册 101 个工具，覆盖 100% 浏览器自动化场景
+
+## 建议
+
+⚠️ MCP 服务器无法启动，请检查错误输出
+
+## 下一步
+
+如果问题仍然存在，请：
+1. 打开 OpenClaw 开发者工具（Help > Toggle Developer Tools）
+2. 查看 Console 标签页
+3. 搜索 "playwright" 或 "mcp" 相关错误
+4. 将错误信息提供给技术支持

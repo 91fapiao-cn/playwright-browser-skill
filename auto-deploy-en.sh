@@ -293,6 +293,126 @@ echo -e "${GRAY}  Total tools: 101${NC}"
 echo -e "${GRAY}  Coverage: 88%${NC}"
 echo ""
 
+# Step 8: Start MCP Server
+echo -e "${YELLOW}[8/9] Starting MCP Server...${NC}"
+
+# Check if MCP server is already running
+MCP_RUNNING=false
+if pgrep -f "node.*mcp-server.js" > /dev/null; then
+    MCP_PID=$(pgrep -f "node.*mcp-server.js")
+    echo -e "${YELLOW}  [!] MCP Server is already running (PID: $MCP_PID)${NC}"
+    MCP_RUNNING=true
+fi
+
+if [ "$MCP_RUNNING" = false ]; then
+    echo -e "${GRAY}  [*] Starting MCP Server...${NC}"
+    
+    # Create startup script
+    STARTUP_SCRIPT="$SKILL_DIR/start-mcp-server.sh"
+    cat > "$STARTUP_SCRIPT" << 'SCRIPT_EOF'
+#!/bin/bash
+echo "Playwright Browser MCP Server"
+echo "Press Ctrl+C to stop server"
+echo "This terminal can be minimized but do not close"
+echo ""
+cd "$(dirname "$0")"
+node dist/mcp-server.js
+SCRIPT_EOF
+    
+    chmod +x "$STARTUP_SCRIPT"
+    echo -e "${GRAY}  [√] Created startup script: $STARTUP_SCRIPT${NC}"
+    
+    # Start MCP server in background
+    if command -v osascript &> /dev/null; then
+        # macOS: Use osascript to open in new minimized terminal
+        osascript -e "tell application \"Terminal\" to do script \"$STARTUP_SCRIPT\"" -e "tell application \"Terminal\" to set miniaturized of window 1 to true" &> /dev/null &
+    else
+        # Linux: Start in background with nohup
+        nohup "$STARTUP_SCRIPT" > "$SKILL_DIR/mcp-server.log" 2>&1 &
+    fi
+    
+    # Wait for server to start
+    sleep 3
+    
+    # Verify startup
+    if pgrep -f "node.*mcp-server.js" > /dev/null; then
+        MCP_PID=$(pgrep -f "node.*mcp-server.js")
+        echo -e "${GREEN}  [√] MCP Server started successfully (PID: $MCP_PID)${NC}"
+    else
+        echo -e "${YELLOW}  [!] MCP Server may still be starting...${NC}"
+    fi
+else
+    echo -e "${GREEN}  [√] MCP Server is already running${NC}"
+fi
+echo ""
+
+# Step 9: Setup Auto-start
+echo -e "${YELLOW}[9/9] Setting up auto-start...${NC}"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: Create LaunchAgent
+    PLIST_PATH="$HOME/Library/LaunchAgents/com.playwright-browser-mcp.plist"
+    
+    cat > "$PLIST_PATH" << PLIST_EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.playwright-browser-mcp</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$STARTUP_SCRIPT</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <false/>
+    <key>StandardOutPath</key>
+    <string>$SKILL_DIR/mcp-server.log</string>
+    <key>StandardErrorPath</key>
+    <string>$SKILL_DIR/mcp-server-error.log</string>
+</dict>
+</plist>
+PLIST_EOF
+    
+    echo -e "${GREEN}  [√] Auto-start configured (LaunchAgent)${NC}"
+    echo -e "${GRAY}      Plist: $PLIST_PATH${NC}"
+    echo -e "${GRAY}      Trigger: At user login${NC}"
+    
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux: Create systemd user service
+    SYSTEMD_DIR="$HOME/.config/systemd/user"
+    mkdir -p "$SYSTEMD_DIR"
+    
+    SERVICE_PATH="$SYSTEMD_DIR/playwright-browser-mcp.service"
+    
+    cat > "$SERVICE_PATH" << SERVICE_EOF
+[Unit]
+Description=Playwright Browser MCP Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=$STARTUP_SCRIPT
+Restart=on-failure
+StandardOutput=append:$SKILL_DIR/mcp-server.log
+StandardError=append:$SKILL_DIR/mcp-server-error.log
+
+[Install]
+WantedBy=default.target
+SERVICE_EOF
+    
+    # Enable the service
+    systemctl --user enable playwright-browser-mcp.service &> /dev/null || true
+    
+    echo -e "${GREEN}  [√] Auto-start configured (systemd)${NC}"
+    echo -e "${GRAY}      Service: $SERVICE_PATH${NC}"
+    echo -e "${GRAY}      Trigger: At user login${NC}"
+    echo -e "${GRAY}      Enable: systemctl --user enable playwright-browser-mcp.service${NC}"
+fi
+echo ""
+
 # Complete
 echo -e "${GREEN}========================================${NC}"
 echo -e "${GREEN}Deployment Complete!${NC}"
@@ -305,6 +425,7 @@ echo -e "  ${NC}Standalone Package: $SKILL_DIR${NC}"
 echo -e "  ${NC}Skill Documentation: $TARGET_FILE${NC}"
 echo -e "  ${NC}MCP Config: $MCP_CONFIG_PATH${NC}"
 echo -e "  ${NC}MCP Server: $DIST_PATH${NC}"
+echo -e "  ${NC}Startup Script: $STARTUP_SCRIPT${NC}"
 echo ""
 
 echo -e "${CYAN}✨ Standalone Package Features:${NC}"
@@ -312,14 +433,29 @@ echo -e "  ${NC}✅ Fully self-contained - No dependency on project source${NC}"
 echo -e "  ${NC}✅ Directly shareable - Just package the entire folder${NC}"
 echo -e "  ${NC}✅ Easy to manage - All files in one location${NC}"
 echo -e "  ${NC}✅ Multi-version support - Install different versions simultaneously${NC}"
+echo -e "  ${NC}✅ Auto-start on login - MCP server starts automatically${NC}"
+echo ""
+
+echo -e "${CYAN}🚀 MCP Server Status:${NC}"
+if pgrep -f "node.*mcp-server.js" > /dev/null; then
+    MCP_PID=$(pgrep -f "node.*mcp-server.js")
+    echo -e "  ${GREEN}✅ MCP Server is running (PID: $MCP_PID)${NC}"
+else
+    echo -e "  ${YELLOW}⚠️  MCP Server is not running${NC}"
+fi
 echo ""
 
 echo -e "${YELLOW}Next Steps:${NC}"
-echo -e "  ${NC}1. Restart OpenClaw${NC}"
+echo -e "  ${NC}1. Restart OpenClaw (or it will auto-detect MCP server)${NC}"
 echo -e "  ${NC}2. Tell OpenClaw in chat:${NC}"
 echo -e "  ${CYAN}   'Please use Playwright Browser Skill to access the internet and control browsers'${NC}"
 echo -e "  ${NC}3. Test: 'Use Playwright Browser Skill to launch browser and visit example.com'${NC}"
-echo -e "  ${NC}4. Check MCP server status (should show playwright-browser)${NC}"
+echo ""
+
+echo -e "${CYAN}Management Commands:${NC}"
+echo -e "${GRAY}  Start MCP:   $STARTUP_SCRIPT${NC}"
+echo -e "${GRAY}  Stop MCP:    pkill -f 'node.*mcp-server.js'${NC}"
+echo -e "${GRAY}  Check Status: pgrep -f 'node.*mcp-server.js'${NC}"
 echo ""
 
 echo -e "${CYAN}Usage:${NC}"

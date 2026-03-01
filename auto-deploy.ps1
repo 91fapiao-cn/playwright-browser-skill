@@ -297,6 +297,94 @@ Write-Host "  工具总数：101 个" -ForegroundColor Gray
 Write-Host "  覆盖率：88%" -ForegroundColor Gray
 Write-Host ""
 
+# 步骤 8：启动 MCP 服务器
+Write-Host "[8/9] 启动 MCP 服务器..." -ForegroundColor Yellow
+
+# 检查 MCP 服务器是否已在运行
+$mcpRunning = $false
+Get-Process node -ErrorAction SilentlyContinue | ForEach-Object {
+    $cmdLine = (Get-WmiObject Win32_Process -Filter "ProcessId = $($_.Id)").CommandLine
+    if ($cmdLine -like "*mcp-server.js*") {
+        $mcpRunning = $true
+        Write-Host "  [!] MCP 服务器已在运行 (PID: $($_.Id))" -ForegroundColor Yellow
+    }
+}
+
+if (-not $mcpRunning) {
+    Write-Host "  [*] 正在启动 MCP 服务器..." -ForegroundColor Gray
+    
+    # 在新的最小化窗口中启动 MCP 服务器
+    $startCmd = "cd '$skillDir'; `$host.UI.RawUI.WindowTitle = 'Playwright Browser MCP Server'; Write-Host 'Playwright Browser MCP Server' -ForegroundColor Cyan; Write-Host '按 Ctrl+C 停止服务器' -ForegroundColor Yellow; Write-Host '此窗口可以最小化，但请勿关闭' -ForegroundColor Yellow; Write-Host ''; node dist\mcp-server.js"
+    
+    Start-Process PowerShell -ArgumentList "-ExecutionPolicy Bypass -NoExit -Command `"$startCmd`"" -WindowStyle Minimized
+    
+    # 等待服务器启动
+    Start-Sleep -Seconds 3
+    
+    # 验证启动
+    $mcpStarted = $false
+    Get-Process node -ErrorAction SilentlyContinue | ForEach-Object {
+        $cmdLine = (Get-WmiObject Win32_Process -Filter "ProcessId = $($_.Id)").CommandLine
+        if ($cmdLine -like "*mcp-server.js*") {
+            $mcpStarted = $true
+            Write-Host "  [√] MCP 服务器启动成功 (PID: $($_.Id))" -ForegroundColor Green
+        }
+    }
+    
+    if (-not $mcpStarted) {
+        Write-Host "  [!] MCP 服务器可能还在启动中..." -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "  [√] MCP 服务器已在运行" -ForegroundColor Green
+}
+Write-Host ""
+
+# 步骤 9：配置自动启动
+Write-Host "[9/9] 配置自动启动..." -ForegroundColor Yellow
+
+try {
+    # 创建启动脚本
+    $startupScriptPath = Join-Path $skillDir "start-mcp-server.ps1"
+    $startupScript = @"
+# Playwright Browser MCP Server 自动启动脚本
+`$host.UI.RawUI.WindowTitle = 'Playwright Browser MCP Server'
+Write-Host 'Playwright Browser MCP Server' -ForegroundColor Cyan
+Write-Host '按 Ctrl+C 停止服务器' -ForegroundColor Yellow
+Write-Host '此窗口可以最小化，但请勿关闭' -ForegroundColor Yellow
+Write-Host ''
+Set-Location '$skillDir'
+node dist\mcp-server.js
+"@
+    
+    $startupScript | Set-Content $startupScriptPath -Encoding UTF8
+    Write-Host "  [√] 已创建启动脚本：$startupScriptPath" -ForegroundColor Gray
+    
+    # 创建计划任务用于自动启动
+    $taskName = "Playwright Browser MCP Server"
+    $taskExists = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+    
+    if ($taskExists) {
+        Write-Host "  [!] 计划任务已存在，正在更新..." -ForegroundColor Yellow
+        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
+    }
+    
+    $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -WindowStyle Minimized -File `"$startupScriptPath`""
+    $trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+    $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Highest
+    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+    
+    Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "用户登录时自动启动 Playwright Browser MCP Server" | Out-Null
+    
+    Write-Host "  [√] 自动启动已配置（Windows 任务计划程序）" -ForegroundColor Green
+    Write-Host "      任务名称：$taskName" -ForegroundColor Gray
+    Write-Host "      触发器：用户登录时" -ForegroundColor Gray
+    
+} catch {
+    Write-Host "  [!] 自动启动配置失败：$_" -ForegroundColor Yellow
+    Write-Host "      您可以手动启动 MCP 服务器：$startupScriptPath" -ForegroundColor Gray
+}
+Write-Host ""
+
 # 完成
 Write-Host "========================================" -ForegroundColor Green
 Write-Host "部署完成！" -ForegroundColor Green
@@ -309,6 +397,7 @@ Write-Host "  独立技能包：$skillDir" -ForegroundColor White
 Write-Host "  Skill 文档：$targetFile" -ForegroundColor White
 Write-Host "  MCP 配置：$mcpConfigPath" -ForegroundColor White
 Write-Host "  MCP 服务器：$distPath" -ForegroundColor White
+Write-Host "  启动脚本：$startupScriptPath" -ForegroundColor White
 Write-Host ""
 
 Write-Host "✨ 独立包特性：" -ForegroundColor Cyan
@@ -316,25 +405,34 @@ Write-Host "  ✅ 完全自包含 - 不依赖项目源代码" -ForegroundColor W
 Write-Host "  ✅ 可直接分享 - 打包整个文件夹即可" -ForegroundColor White
 Write-Host "  ✅ 易于管理 - 所有文件在一个位置" -ForegroundColor White
 Write-Host "  ✅ 支持多版本 - 可同时安装不同版本" -ForegroundColor White
+Write-Host "  ✅ 开机自启动 - MCP 服务器自动启动" -ForegroundColor White
+Write-Host ""
+
+Write-Host "🚀 MCP 服务器状态：" -ForegroundColor Cyan
+$mcpFound = $false
+Get-Process node -ErrorAction SilentlyContinue | ForEach-Object {
+    $cmdLine = (Get-WmiObject Win32_Process -Filter "ProcessId = $($_.Id)").CommandLine
+    if ($cmdLine -like "*mcp-server.js*") {
+        $mcpFound = $true
+        Write-Host "  ✅ MCP 服务器正在运行 (PID: $($_.Id))" -ForegroundColor Green
+    }
+}
+if (-not $mcpFound) {
+    Write-Host "  ⚠️  MCP 服务器未运行" -ForegroundColor Yellow
+}
 Write-Host ""
 
 Write-Host "下一步：" -ForegroundColor Yellow
-Write-Host "  1. 重启 OpenClaw" -ForegroundColor White
+Write-Host "  1. 重启 OpenClaw（或它会自动检测 MCP 服务器）" -ForegroundColor White
 Write-Host "  2. 在对话中告诉 OpenClaw：" -ForegroundColor White
 Write-Host "     '请使用 Playwright Browser Skill 技能来访问互联网和控制浏览器'" -ForegroundColor Cyan
 Write-Host "  3. 测试：'使用 Playwright Browser Skill 启动浏览器并访问 example.com'" -ForegroundColor White
-Write-Host "  4. 查看 MCP 服务器状态（应显示 playwright-browser）" -ForegroundColor White
 Write-Host ""
 
-Write-Host "⚠️ 配置提示：" -ForegroundColor Yellow
-Write-Host "  如果 OpenClaw 无法识别技能，可能是 openclaw.json 中有旧配置" -ForegroundColor White
-Write-Host "  解决方法：" -ForegroundColor White
-Write-Host "  1. 打开 $env:USERPROFILE\.openclaw\openclaw.json" -ForegroundColor Gray
-Write-Host "  2. 查找 'playwright-browser' 配置" -ForegroundColor Gray
-Write-Host "  3. 确保路径正确（不包含 'backup' 字样）" -ForegroundColor Gray
-Write-Host "  4. 或删除该配置，让 OpenClaw 使用 mcp.json" -ForegroundColor Gray
-Write-Host ""
-Write-Host "  详细说明请查看：OPENCLAW_MCP_GUIDE.md" -ForegroundColor Cyan
+Write-Host "管理命令：" -ForegroundColor Cyan
+Write-Host "  启动 MCP：  PowerShell -File `"$startupScriptPath`"" -ForegroundColor Gray
+Write-Host "  停止 MCP：  Get-Process node | Where-Object {(Get-WmiObject Win32_Process -Filter `"ProcessId = `$(`$_.Id)`").CommandLine -like '*mcp-server*'} | Stop-Process" -ForegroundColor Gray
+Write-Host "  检查状态：  Get-Process node | Where-Object {(Get-WmiObject Win32_Process -Filter `"ProcessId = `$(`$_.Id)`").CommandLine -like '*mcp-server*'}" -ForegroundColor Gray
 Write-Host ""
 
 Write-Host "使用说明：" -ForegroundColor Cyan
