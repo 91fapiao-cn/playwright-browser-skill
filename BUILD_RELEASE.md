@@ -89,7 +89,7 @@ playwright-browser-skill-windows-v2.1.0/
 │   └── ...
 ├── skill-package/                 # 技能包
 │   ├── skills/
-│   │   └── playwright-browser.md # 技能文档（101个工具）
+│   │   └── SKILL.md # 技能文档（101个工具）
 │   └── settings/
 │       └── mcp.json              # MCP 配置示例
 ├── auto-deploy.ps1               # 自动部署脚本（中文）

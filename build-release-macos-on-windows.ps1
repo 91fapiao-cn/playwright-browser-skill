@@ -61,7 +61,7 @@ Copy-Item "node_modules" -Destination "$ReleaseDir\node_modules" -Recurse
 
 # 复制 skill 文件
 New-Item -ItemType Directory -Path "$ReleaseDir\skill-package\skills" -Force | Out-Null
-Copy-Item "skill-package\skills\playwright-browser.md" -Destination "$ReleaseDir\skill-package\skills\"
+Copy-Item "skill-package\skills\SKILL.md" -Destination "$ReleaseDir\skill-package\skills\"
 
 # 复制配置示例
 New-Item -ItemType Directory -Path "$ReleaseDir\skill-package\settings" -Force | Out-Null

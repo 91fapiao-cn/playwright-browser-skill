@@ -51,7 +51,7 @@ cp -r node_modules "$RELEASE_DIR/"
 
 # 复制 skill 文件
 mkdir -p "$RELEASE_DIR/skill-package/skills"
-cp skill-package/skills/playwright-browser.md "$RELEASE_DIR/skill-package/skills/"
+cp skill-package/skills/SKILL.md "$RELEASE_DIR/skill-package/skills/"
 
 # 复制配置示例
 mkdir -p "$RELEASE_DIR/skill-package/settings"

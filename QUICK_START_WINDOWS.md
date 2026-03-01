@@ -47,12 +47,12 @@ cd D:\your-path\playwright-browser-skill
 
 ```cmd
 REM 在项目目录运行
-copy .kiro\skills\playwright-browser.md %USERPROFILE%.openclaw\skills\
+copy skill-package\skills\SKILL.md %USERPROFILE%\.openclaw\skills\playwright-browser\
 ```
 
 或手动复制：
-- **源文件**：`项目目录.openclaw\skills\playwright-browser.md`
-- **目标位置**：`C:\Users\你的用户名.openclaw\skills\playwright-browser.md`
+- **源文件**：`项目目录\skill-package\skills\SKILL.md`
+- **目标位置**：`C:\Users\你的用户名\.openclaw\skills\playwright-browser\SKILL.md`
 
 ### 步骤 4：重启 OpenClaw
 

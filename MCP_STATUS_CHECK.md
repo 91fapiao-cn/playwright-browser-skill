@@ -59,14 +59,14 @@ C:\Users\Administrator\.openclaw\skills\playwright-browser\
 ├── dist/                    ✅ 存在
 │   └── mcp-server.js       ✅ 存在
 ├── node_modules/            ✅ 存在
-└── playwright-browser.md    ✅ 存在
+└── SKILL.md    ✅ 存在
 ```
 
 **验证结果：**
 - ✅ dist 目录存在
 - ✅ mcp-server.js 文件存在
 - ✅ node_modules 目录存在（完整依赖）
-- ✅ playwright-browser.md 技能文档存在
+- ✅ SKILL.md 技能文档存在
 
 **状态：** ✅ 正常
 
@@ -91,6 +91,7 @@ Playwright Browser MCP Server v2.1 已启动
 - ✅ 注册了 101 个工具
 - ✅ 无错误信息
 - ✅ 无警告信息
+- ✅ package.json 已正确部署（无 ENOENT 错误）
 
 **状态：** ✅ 正常
 
@@ -180,7 +181,7 @@ MCP 服务器提供 **101 个浏览器操作工具**：
 - browser_get_links - 获取链接
 - 更多...
 
-[查看完整工具列表](C:\Users\Administrator\.openclaw\skills\playwright-browser\playwright-browser.md)
+[查看完整工具列表](C:\Users\Administrator\.openclaw\skills\playwright-browser\SKILL.md)
 
 ---
 

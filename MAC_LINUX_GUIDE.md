@@ -112,7 +112,7 @@ npm run build
 
 ```bash
 mkdir -p ~/.openclaw/skills/playwright-browser
-cp skill-package/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser/
 ```
 
 #### 3. 配置 MCP 服务器
@@ -158,7 +158,7 @@ sudo systemctl restart openclaw
 
 ```bash
 # 检查 Skill 文件
-ls -la ~/.openclaw/skills/playwright-browser/playwright-browser.md
+ls -la ~/.openclaw/skills/playwright-browser/SKILL.md
 
 # 检查 MCP 配置
 cat ~/.openclaw/settings/mcp.json
@@ -522,7 +522,7 @@ npm run build
 
 ```bash
 mkdir -p ~/.openclaw/skills/playwright-browser
-cp skill-package/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser/
 ```
 
 #### 3. Configure MCP Server
@@ -568,7 +568,7 @@ sudo systemctl restart openclaw
 
 ```bash
 # Check Skill file
-ls -la ~/.openclaw/skills/playwright-browser/playwright-browser.md
+ls -la ~/.openclaw/skills/playwright-browser/SKILL.md
 
 # Check MCP configuration
 cat ~/.openclaw/settings/mcp.json

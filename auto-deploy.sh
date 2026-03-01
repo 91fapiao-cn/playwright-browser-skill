@@ -84,7 +84,7 @@ ensure_directory() {
 # 步骤 0：检查项目目录
 echo -e "${YELLOW}[0/5] 检查项目环境...${NC}"
 
-if [ ! -f "skill-package/skills/playwright-browser.md" ]; then
+if [ ! -f "skill-package/skills/SKILL.md" ]; then
     echo -e "${RED}[X] 错误：请在项目根目录运行此脚本${NC}"
     echo -e "${GRAY}    当前目录：$(pwd)${NC}"
     exit 1
@@ -154,8 +154,8 @@ echo ""
 echo -e "${YELLOW}[4/7] 部署独立技能包...${NC}"
 
 # 4.1 Copy Skill documentation
-SOURCE_FILE="skill-package/skills/playwright-browser.md"
-TARGET_FILE="$SKILL_DIR/playwright-browser.md"
+SOURCE_FILE="skill-package/skills/SKILL.md"
+TARGET_FILE="$SKILL_DIR/SKILL.md"
 
 cp "$SOURCE_FILE" "$TARGET_FILE"
 echo -e "${GREEN}  [√] Skill 文档已部署${NC}"
@@ -263,7 +263,7 @@ echo ""
 echo -e "${YELLOW}[6/7] 验证部署...${NC}"
 
 required_files=(
-    "$SKILL_DIR/playwright-browser.md"
+    "$SKILL_DIR/SKILL.md"
     "$SKILL_DIR/dist/mcp-server.js"
     "$SKILL_DIR/dist/index.js"
     "$SKILL_DIR/node_modules/playwright"

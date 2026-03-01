@@ -84,7 +84,7 @@ ensure_directory() {
 # Step 0: Check project directory
 echo -e "${YELLOW}[0/5] Checking project environment...${NC}"
 
-if [ ! -f "skill-package/skills/playwright-browser.md" ]; then
+if [ ! -f "skill-package/skills/SKILL.md" ]; then
     echo -e "${RED}[X] Error: Please run this script in the project root directory${NC}"
     echo -e "${GRAY}    Current directory: $(pwd)${NC}"
     exit 1
@@ -154,8 +154,8 @@ echo ""
 echo -e "${YELLOW}[4/7] Deploying standalone skill package...${NC}"
 
 # 4.1 Copy Skill documentation
-SOURCE_FILE="skill-package/skills/playwright-browser.md"
-TARGET_FILE="$SKILL_DIR/playwright-browser.md"
+SOURCE_FILE="skill-package/skills/SKILL.md"
+TARGET_FILE="$SKILL_DIR/SKILL.md"
 
 cp "$SOURCE_FILE" "$TARGET_FILE"
 echo -e "${GREEN}  [√] Skill documentation deployed${NC}"
@@ -263,7 +263,7 @@ echo ""
 echo -e "${YELLOW}[6/7] Verifying deployment...${NC}"
 
 required_files=(
-    "$SKILL_DIR/playwright-browser.md"
+    "$SKILL_DIR/SKILL.md"
     "$SKILL_DIR/dist/mcp-server.js"
     "$SKILL_DIR/dist/index.js"
     "$SKILL_DIR/node_modules/playwright"

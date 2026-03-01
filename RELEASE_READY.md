@@ -14,6 +14,7 @@
 - **位置：** `releases/playwright-browser-skill-windows-v2.1.0.zip`
 - **验证：** ✅ 已完整测试
 - **安装方式：** 双击 `auto-deploy.cmd`
+- **更新：** ✅ 包含 SKILL.md（修复 OpenClaw 识别问题）
 
 ### Mac/Linux 版本 ✅
 - **文件：** `playwright-browser-skill-macos-linux-v2.1.0.tar.gz`
@@ -21,6 +22,7 @@
 - **位置：** `releases/playwright-browser-skill-macos-linux-v2.1.0.tar.gz`
 - **验证：** ⚠️ 在 Windows 上生成，建议在实际环境测试
 - **安装方式：** `chmod +x auto-deploy.sh && ./auto-deploy.sh`
+- **更新：** ✅ 包含 SKILL.md（修复 OpenClaw 识别问题）
 
 ---
 

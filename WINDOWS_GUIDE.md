@@ -75,7 +75,7 @@ C:\Users\你的用户名.openclaw\
 ├── settings\
 │   └── mcp.json          ← MCP 服务器配置
 └── skills\
-    └── playwright-browser.md  ← Skill 定义文件
+    └── SKILL.md  ← Skill 定义文件
 ```
 
 **重要**：配置文件在 OpenClaw 的配置目录，而不是项目目录！
@@ -131,17 +131,17 @@ REM 确保目标目录存在
 if not exist "%USERPROFILE%.openclaw\skills" mkdir "%USERPROFILE%.openclaw\skills"
 
 REM 复制 Skill 文件
-copy .kiro\skills\playwright-browser.md %USERPROFILE%.openclaw\skills\
+copy skill-package\skills\SKILL.md %USERPROFILE%\.openclaw\skills\playwright-browser\
 ```
 
 验证复制成功：
 ```cmd
-dir %USERPROFILE%.openclaw\skills\playwright-browser.md
+dir %USERPROFILE%\.openclaw\skills\playwright-browser\SKILL.md
 ```
 
 或者手动复制文件：
-- **源文件**：`项目目录.openclaw\skills\playwright-browser.md`
-- **目标位置**：`C:\Users\你的用户名.openclaw\skills\playwright-browser.md`
+- **源文件**：`项目目录\skill-package\skills\SKILL.md`
+- **目标位置**：`C:\Users\你的用户名\.openclaw\skills\playwright-browser\SKILL.md`
 
 ## 🧪 测试安装
 
@@ -270,7 +270,7 @@ D:\Projects\playwright-browser-skill\
 ├── test\
 ├── .kiro\
 │   └── skills\
-│       └── playwright-browser.md  ← 源 Skill 文件（需要复制）
+│       └── SKILL.md  ← 源 Skill 文件（需要复制）
 └── package.json
 ```
 
@@ -281,7 +281,7 @@ C:\Users\你的用户名.openclaw\
 ├── settings\
 │   └── mcp.json           ← MCP 配置文件（在这里编辑）
 └── skills\
-    └── playwright-browser.md  ← Skill 文件（复制到这里）
+    └── SKILL.md  ← Skill 文件（复制到这里）
 ```
 
 **关键点**：

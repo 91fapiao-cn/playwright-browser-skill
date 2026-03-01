@@ -27,7 +27,7 @@
 ```
 ✅ dist/mcp-server.js - MCP 服务器入口
 ✅ node_modules/playwright/ - Playwright 依赖
-✅ skill-package/skills/playwright-browser.md - 技能文档
+✅ skill-package/skills/SKILL.md - 技能文档
 ✅ auto-deploy.cmd - CMD 部署脚本
 ✅ auto-deploy-en.cmd - CMD 部署脚本（英文）
 ✅ auto-deploy.ps1 - PowerShell 部署脚本
@@ -92,7 +92,7 @@ auto-deploy.cmd --skip-build
 ```
 
 **部署结果：**
-- ✅ Skill 文档：`C:\Users\Administrator\.openclaw\skills\playwright-browser\playwright-browser.md`
+- ✅ Skill 文档：`C:\Users\Administrator\.openclaw\skills\playwright-browser\SKILL.md`
 - ✅ 编译代码：`C:\Users\Administrator\.openclaw\skills\playwright-browser\dist\`
 - ✅ 运行依赖：`C:\Users\Administrator\.openclaw\skills\playwright-browser\node_modules\`
 - ✅ MCP 配置：`C:\Users\Administrator\.openclaw\settings\mcp.json`
@@ -109,7 +109,7 @@ auto-deploy.cmd --skip-build
 ```
 ✅ dist/mcp-server.js - 存在
 ✅ node_modules/ - 存在
-✅ playwright-browser.md - 存在（29,296 字节）
+✅ SKILL.md - 存在（29,296 字节）
 ```
 
 **状态：** ✅ 通过
@@ -194,7 +194,7 @@ Playwright Browser MCP Server v2.1 已启动
 C:\Users\Administrator\.openclaw\skills\playwright-browser\
 ├── dist/                    # 编译代码
 ├── node_modules/            # 完整依赖
-└── playwright-browser.md    # 技能文档
+└── SKILL.md    # 技能文档
 ```
 
 **状态：** ✅ 通过

@@ -147,10 +147,10 @@ If manual deployment is needed, follow these steps:
 
 ```bash
 # Windows
-copy skill-package\skills\playwright-browser.md %USERPROFILE%\.openclaw\skills\playwright-browser\
+copy skill-package\skills\SKILL.md %USERPROFILE%\.openclaw\skills\playwright-browser\
 
 # macOS/Linux
-cp skill-package/skills/playwright-browser.md ~/.openclaw/skills/playwright-browser/
+cp skill-package/skills/SKILL.md ~/.openclaw/skills/playwright-browser/
 ```
 
 #### 2. Configure MCP Server
@@ -218,7 +218,7 @@ This tells OpenClaw to use this skill for all browser-related tasks.
 - `browser_get_links` - Get links
 - More...
 
-[View Complete Tool List](skill-package/skills/playwright-browser.md)
+[View Complete Tool List](skill-package/skills/SKILL.md)
 
 ## 💡 Usage Examples
 
@@ -301,7 +301,7 @@ browser_evaluate({
 browser_close()
 ```
 
-[View More Examples](skill-package/skills/playwright-browser.md#usage-examples)
+[View More Examples](skill-package/skills/SKILL.md#usage-examples)
 
 ## 🧪 Testing
 
@@ -326,7 +326,7 @@ npm run test:mcp
 
 - [Configuration Guide](CONFIGURATION_GUIDE.md) - Detailed configuration for headless mode, browser options, etc.
 - [Auto-Deploy Guide](AUTO_DEPLOY_README_EN.md) - Cross-platform auto-deploy detailed instructions
-- [Complete Tool Documentation](skill-package/skills/playwright-browser.md) - Detailed description of all 101 tools
+- [Complete Tool Documentation](skill-package/skills/SKILL.md) - Detailed description of all 101 tools
 - [Windows Usage Guide](WINDOWS_GUIDE.md) - Windows platform specific instructions
 - [Mac/Linux Usage Guide](MAC_LINUX_GUIDE.md) - Mac and Linux platform specific instructions
 - [Quick Start Guide](QUICK_START_WINDOWS.md) - Quick start tutorial
@@ -345,7 +345,7 @@ playwright-browser-skill/
 │   └── tools-registry.ts     # Tools registry
 ├── skill-package/
 │   ├── skills/
-│   │   └── playwright-browser.md  # Skill definition file
+│   │   └── SKILL.md  # Skill definition file
 │   └── settings/
 │       └── mcp.json          # MCP configuration example
 ├── test/                     # Test files

@@ -54,7 +54,7 @@ function Ensure-Directory {
 # 步骤 0：检查项目目录
 Write-Host "[0/5] 检查项目环境..." -ForegroundColor Yellow
 
-if (-not (Test-Path "skill-package\skills\playwright-browser.md")) {
+if (-not (Test-Path "skill-package\skills\SKILL.md")) {
     Write-Host "[X] 错误：请在项目根目录运行此脚本" -ForegroundColor Red
     Write-Host "    当前目录：$(Get-Location)" -ForegroundColor Gray
     exit 1
@@ -129,8 +129,8 @@ Write-Host ""
 Write-Host "[4/7] 部署独立技能包..." -ForegroundColor Yellow
 
 # 4.1 复制 Skill 文档
-$sourceFile = "skill-package\skills\playwright-browser.md"
-$targetFile = Join-Path $skillDir "playwright-browser.md"
+$sourceFile = "skill-package\skills\SKILL.md"
+$targetFile = Join-Path $skillDir "SKILL.md"
 
 try {
     Copy-Item $sourceFile $targetFile -Force
@@ -264,7 +264,7 @@ Write-Host ""
 Write-Host "[6/7] 验证部署..." -ForegroundColor Yellow
 
 $requiredFiles = @(
-    (Join-Path $skillDir "playwright-browser.md"),
+    (Join-Path $skillDir "SKILL.md"),
     (Join-Path $skillDir "dist\mcp-server.js"),
     (Join-Path $skillDir "dist\index.js"),
     (Join-Path $skillDir "node_modules\playwright")

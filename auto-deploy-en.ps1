@@ -54,7 +54,7 @@ function Ensure-Directory {
 # Step 0: Check project directory
 Write-Host "[0/5] Checking project environment..." -ForegroundColor Yellow
 
-if (-not (Test-Path "skill-package\skills\playwright-browser.md")) {
+if (-not (Test-Path "skill-package\skills\SKILL.md")) {
     Write-Host "[X] Error: Please run this script in the project root directory" -ForegroundColor Red
     Write-Host "    Current directory: $(Get-Location)" -ForegroundColor Gray
     exit 1
@@ -129,8 +129,8 @@ Write-Host ""
 Write-Host "[4/7] Deploying standalone skill package..." -ForegroundColor Yellow
 
 # 4.1 Copy Skill documentation
-$sourceFile = "skill-package\skills\playwright-browser.md"
-$targetFile = Join-Path $skillDir "playwright-browser.md"
+$sourceFile = "skill-package\skills\SKILL.md"
+$targetFile = Join-Path $skillDir "SKILL.md"
 
 try {
     Copy-Item $sourceFile $targetFile -Force
@@ -264,7 +264,7 @@ Write-Host ""
 Write-Host "[6/7] Verifying deployment..." -ForegroundColor Yellow
 
 $requiredFiles = @(
-    (Join-Path $skillDir "playwright-browser.md"),
+    (Join-Path $skillDir "SKILL.md"),
     (Join-Path $skillDir "dist\mcp-server.js"),
     (Join-Path $skillDir "dist\index.js"),
     (Join-Path $skillDir "node_modules\playwright")

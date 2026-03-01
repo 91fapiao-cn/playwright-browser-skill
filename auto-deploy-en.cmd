@@ -45,7 +45,7 @@ echo.
 REM Step 0: Check project directory
 echo [0/5] Checking project environment...
 
-if not exist "skill-package\skills\playwright-browser.md" (
+if not exist "skill-package\skills\SKILL.md" (
     echo [X] Error: Please run this script in the project root directory
     echo     Current directory: %CD%
     exit /b 1
@@ -148,8 +148,8 @@ REM Step 4: Deploy standalone skill package
 echo [4/7] Deploying standalone skill package...
 
 REM 4.1 Copy Skill documentation
-set "SOURCE_FILE=skill-package\skills\playwright-browser.md"
-set "TARGET_FILE=%SKILL_DIR%\playwright-browser.md"
+set "SOURCE_FILE=skill-package\skills\SKILL.md"
+set "TARGET_FILE=%SKILL_DIR%\SKILL.md"
 
 copy /Y "%SOURCE_FILE%" "%TARGET_FILE%" >nul
 if exist "%TARGET_FILE%" (
@@ -258,10 +258,10 @@ REM Step 6: Verify deployment
 echo [6/7] Verifying deployment...
 
 set "ALL_OK=1"
-if exist "%SKILL_DIR%\playwright-browser.md" (
-    echo   [√] playwright-browser.md
+if exist "%SKILL_DIR%\SKILL.md" (
+    echo   [√] SKILL.md
 ) else (
-    echo   [X] Missing: playwright-browser.md
+    echo   [X] Missing: SKILL.md
     set "ALL_OK=0"
 )
 
