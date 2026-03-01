@@ -167,11 +167,15 @@ set "DIST_TARGET=%SKILL_DIR%\dist"
 if exist "%DIST_TARGET%" (
     rmdir /s /q "%DIST_TARGET%"
 )
-xcopy /E /I /Y /Q "%DIST_SOURCE%" "%DIST_TARGET%" >nul
+xcopy /E /I /Y /Q "%DIST_SOURCE%" "%DIST_TARGET%" >nul 2>&1
+if errorlevel 1 (
+    echo [X] Compiled code copy failed
+    exit /b 1
+)
 if exist "%DIST_TARGET%\mcp-server.js" (
     echo   [√] Compiled code deployed (dist/)
 ) else (
-    echo [X] Compiled code deployment failed
+    echo [X] Compiled code deployment failed: mcp-server.js not found
     exit /b 1
 )
 
@@ -184,9 +188,19 @@ if exist "%NODE_MODULES_TARGET%" (
 )
 
 echo     [*] Copying all dependencies (this may take a moment)...
-xcopy /E /I /Y /Q "node_modules" "%NODE_MODULES_TARGET%" >nul
+xcopy /E /I /Y /Q "node_modules" "%NODE_MODULES_TARGET%" >nul 2>&1
+if errorlevel 1 (
+    echo   [X] Dependencies copy failed
+    exit /b 1
+)
 
-echo   [√] Runtime dependencies deployed
+REM Verify critical dependencies exist
+if exist "%NODE_MODULES_TARGET%\playwright" (
+    echo   [√] Runtime dependencies deployed
+) else (
+    echo   [X] Dependencies deployment failed: playwright not found
+    exit /b 1
+)
 
 REM 4.4 Copy package.json
 echo   [*] Copying package.json...
@@ -327,6 +341,16 @@ echo   2. Tell OpenClaw in chat:
 echo      'Please use Playwright Browser Skill to access the internet and control browsers'
 echo   3. Test: 'Use Playwright Browser Skill to launch browser and visit example.com'
 echo   4. Check MCP server status (should show playwright-browser)
+echo.
+echo ⚠️ Configuration Note:
+echo   If OpenClaw cannot recognize the skill, there may be old config in openclaw.json
+echo   Solution:
+echo   1. Open %USERPROFILE%\.openclaw\openclaw.json
+echo   2. Find "playwright-browser" configuration
+echo   3. Ensure path is correct (no "backup" in path)
+echo   4. Or remove that config to let OpenClaw use mcp.json
+echo.
+echo   For details, see: OPENCLAW_MCP_GUIDE.md
 echo.
 
 echo Usage:

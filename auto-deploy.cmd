@@ -167,11 +167,15 @@ set "DIST_TARGET=%SKILL_DIR%\dist"
 if exist "%DIST_TARGET%" (
     rmdir /s /q "%DIST_TARGET%"
 )
-xcopy /E /I /Y /Q "%DIST_SOURCE%" "%DIST_TARGET%" >nul
+xcopy /E /I /Y /Q "%DIST_SOURCE%" "%DIST_TARGET%" >nul 2>&1
+if errorlevel 1 (
+    echo [X] 编译代码复制失败
+    exit /b 1
+)
 if exist "%DIST_TARGET%\mcp-server.js" (
     echo   [√] 编译代码已部署 (dist/)
 ) else (
-    echo [X] 编译代码部署失败
+    echo [X] 编译代码部署失败：mcp-server.js 不存在
     exit /b 1
 )
 
@@ -184,9 +188,19 @@ if exist "%NODE_MODULES_TARGET%" (
 )
 
 echo     [*] 复制所有依赖（这可能需要一些时间）...
-xcopy /E /I /Y /Q "node_modules" "%NODE_MODULES_TARGET%" >nul
+xcopy /E /I /Y /Q "node_modules" "%NODE_MODULES_TARGET%" >nul 2>&1
+if errorlevel 1 (
+    echo   [X] 依赖复制失败
+    exit /b 1
+)
 
-echo   [√] 运行时依赖已部署
+REM 验证关键依赖是否存在
+if exist "%NODE_MODULES_TARGET%\playwright" (
+    echo   [√] 运行时依赖已部署
+) else (
+    echo   [X] 依赖部署失败：playwright 不存在
+    exit /b 1
+)
 
 REM 4.4 复制 package.json
 echo   [*] 复制 package.json...
@@ -327,6 +341,16 @@ echo   2. 在对话中告诉 OpenClaw：
 echo      '请使用 Playwright Browser Skill 技能来访问互联网和控制浏览器'
 echo   3. 测试：'使用 Playwright Browser Skill 启动浏览器并访问 example.com'
 echo   4. 查看 MCP 服务器状态（应显示 playwright-browser）
+echo.
+echo ⚠️ 配置提示：
+echo   如果 OpenClaw 无法识别技能，可能是 openclaw.json 中有旧配置
+echo   解决方法：
+echo   1. 打开 %USERPROFILE%\.openclaw\openclaw.json
+echo   2. 查找 "playwright-browser" 配置
+echo   3. 确保路径正确（不包含 "backup" 字样）
+echo   4. 或删除该配置，让 OpenClaw 使用 mcp.json
+echo.
+echo   详细说明请查看：OPENCLAW_MCP_GUIDE.md
 echo.
 
 echo 使用说明：

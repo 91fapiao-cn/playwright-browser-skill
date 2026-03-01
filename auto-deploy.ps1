@@ -326,6 +326,17 @@ Write-Host "  3. 测试：'使用 Playwright Browser Skill 启动浏览器并访
 Write-Host "  4. 查看 MCP 服务器状态（应显示 playwright-browser）" -ForegroundColor White
 Write-Host ""
 
+Write-Host "⚠️ 配置提示：" -ForegroundColor Yellow
+Write-Host "  如果 OpenClaw 无法识别技能，可能是 openclaw.json 中有旧配置" -ForegroundColor White
+Write-Host "  解决方法：" -ForegroundColor White
+Write-Host "  1. 打开 $env:USERPROFILE\.openclaw\openclaw.json" -ForegroundColor Gray
+Write-Host "  2. 查找 'playwright-browser' 配置" -ForegroundColor Gray
+Write-Host "  3. 确保路径正确（不包含 'backup' 字样）" -ForegroundColor Gray
+Write-Host "  4. 或删除该配置，让 OpenClaw 使用 mcp.json" -ForegroundColor Gray
+Write-Host ""
+Write-Host "  详细说明请查看：OPENCLAW_MCP_GUIDE.md" -ForegroundColor Cyan
+Write-Host ""
+
 Write-Host "使用说明：" -ForegroundColor Cyan
 Write-Host "  默认部署：  .\auto-deploy.ps1" -ForegroundColor Gray
 Write-Host "  跳过构建：  .\auto-deploy.ps1 -SkipBuild" -ForegroundColor Gray

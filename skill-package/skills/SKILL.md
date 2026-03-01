@@ -4,9 +4,276 @@ description: 浏览器自动化技能，支持101个工具：页面导航、元�
 version: 2.1.0
 ---
 
-# Playwright Browser Skill - 完整工具文档
+# Playwright Browser Skill - 浏览器自动化技能
 
-这是一个基于 Playwright 的浏览器自动化技能，通过 MCP 协议提供 101 个完整的浏览器操作能力。
+这是一个强大的浏览器自动化技能，可以帮助你控制浏览器、访问网页、提取内容、截图等。通过 MCP 协议提供 101 个完整的浏览器操作工具。
+
+## 🚀 快速开始
+
+### 如何使用这个技能
+
+**基本用法：**
+当你需要访问网页、提取信息或控制浏览器时，直接告诉我你的需求即可。我会自动选择合适的工具来完成任务。
+
+**示例对话：**
+- "帮我访问 example.com 并获取页面标题"
+- "打开百度搜索 'OpenClaw'"
+- "访问 github.com 并截图"
+- "帮我从这个网页提取所有链接"
+- "启动浏览器并访问 https://www.google.com"
+
+### 主要功能
+
+1. **网页访问** - 访问任何网站，获取页面内容
+2. **内容提取** - 提取文本、链接、图片等信息
+3. **页面交互** - 点击按钮、填写表单、滚动页面
+4. **截图保存** - 对整个页面或特定元素截图
+5. **数据抓取** - 批量提取网页数据
+6. **自动化测试** - 模拟用户操作，测试网站功能
+
+### 常见使用场景
+
+**场景 1：快速查看网页**
+```
+你：帮我看看 example.com 上有什么内容
+我：会自动启动浏览器，访问网页，提取并总结内容
+```
+
+**场景 2：提取信息**
+```
+你：从 news.ycombinator.com 提取今天的热门文章标题
+我：会访问网页，提取所有文章标题并整理给你
+```
+
+**场景 3：网页截图**
+```
+你：帮我截取 github.com 首页的截图
+我：会访问网页并保存截图
+```
+
+**场景 4：表单填写**
+```
+你：帮我在这个网站的搜索框输入 "OpenClaw" 并搜索
+我：会找到搜索框，输入内容，点击搜索按钮
+```
+
+## 💡 使用提示
+
+- **无需指定工具名称** - 直接说你的需求，我会自动选择合适的工具
+- **支持中英文** - 可以用中文或英文描述你的需求
+- **支持复杂任务** - 可以组合多个操作完成复杂任务
+- **自动处理错误** - 如果遇到问题，我会自动重试或调整策略
+
+---
+
+## 🔧 工具调用指南（给 OpenClaw 看的）
+
+### 基本调用流程
+
+**步骤 1：启动浏览器**
+```json
+工具名称: browser_launch
+参数: {
+  "browserType": "chromium",
+  "headless": false
+}
+```
+
+**步骤 2：访问网页**
+```json
+工具名称: browser_goto
+参数: {
+  "url": "https://example.com",
+  "waitUntil": "networkidle"
+}
+```
+
+**步骤 3：提取内容**
+```json
+工具名称: browser_get_title
+参数: {}
+```
+
+**步骤 4：关闭浏览器**
+```json
+工具名称: browser_close
+参数: {}
+```
+
+### 常用工具快速参考
+
+#### 1. 启动浏览器
+```json
+{
+  "tool": "browser_launch",
+  "arguments": {
+    "browserType": "chromium",
+    "headless": false
+  }
+}
+```
+
+#### 2. 访问网页
+```json
+{
+  "tool": "browser_goto",
+  "arguments": {
+    "url": "https://example.com"
+  }
+}
+```
+
+#### 3. 获取页面标题
+```json
+{
+  "tool": "browser_get_title",
+  "arguments": {}
+}
+```
+
+#### 4. 获取页面文本
+```json
+{
+  "tool": "browser_get_text",
+  "arguments": {
+    "selector": "body"
+  }
+}
+```
+
+#### 5. 点击元素
+```json
+{
+  "tool": "browser_click",
+  "arguments": {
+    "selector": "button.submit"
+  }
+}
+```
+
+#### 6. 填写表单
+```json
+{
+  "tool": "browser_fill",
+  "arguments": {
+    "selector": "#username",
+    "value": "user@example.com"
+  }
+}
+```
+
+#### 7. 截图
+```json
+{
+  "tool": "browser_screenshot",
+  "arguments": {
+    "path": "screenshot.png",
+    "fullPage": true
+  }
+}
+```
+
+#### 8. 获取所有链接
+```json
+{
+  "tool": "browser_get_links",
+  "arguments": {}
+}
+```
+
+#### 9. 等待元素
+```json
+{
+  "tool": "browser_wait_for_selector",
+  "arguments": {
+    "selector": ".content",
+    "timeout": 10000
+  }
+}
+```
+
+#### 10. 关闭浏览器
+```json
+{
+  "tool": "browser_close",
+  "arguments": {}
+}
+```
+
+### 完整任务示例
+
+#### 示例 1：访问网页并提取标题
+```
+步骤 1: browser_launch
+  参数: { "headless": false }
+
+步骤 2: browser_goto
+  参数: { "url": "https://example.com" }
+
+步骤 3: browser_get_title
+  参数: {}
+
+步骤 4: browser_close
+  参数: {}
+```
+
+#### 示例 2：搜索并提取结果
+```
+步骤 1: browser_launch
+  参数: { "headless": false }
+
+步骤 2: browser_goto
+  参数: { "url": "https://www.baidu.com" }
+
+步骤 3: browser_fill
+  参数: { "selector": "#kw", "value": "OpenClaw" }
+
+步骤 4: browser_click
+  参数: { "selector": "#su" }
+
+步骤 5: browser_wait_for_selector
+  参数: { "selector": ".result", "timeout": 5000 }
+
+步骤 6: browser_get_text
+  参数: { "selector": ".result" }
+
+步骤 7: browser_close
+  参数: {}
+```
+
+#### 示例 3：提取网页数据
+```
+步骤 1: browser_launch
+  参数: {}
+
+步骤 2: browser_goto
+  参数: { "url": "https://news.ycombinator.com" }
+
+步骤 3: browser_wait_for_selector
+  参数: { "selector": ".itemlist" }
+
+步骤 4: browser_evaluate
+  参数: { 
+    "script": "Array.from(document.querySelectorAll('.titleline > a')).map(a => ({ title: a.textContent, url: a.href }))"
+  }
+
+步骤 5: browser_close
+  参数: {}
+```
+
+### 重要提示
+
+1. **必须先启动浏览器** - 使用任何其他工具前，必须先调用 `browser_launch`
+2. **使用完毕要关闭** - 任务完成后，调用 `browser_close` 释放资源
+3. **等待页面加载** - 访问网页后，使用 `browser_wait_for_selector` 等待内容加载
+4. **选择器要准确** - 使用正确的 CSS 选择器来定位元素
+5. **处理错误** - 如果工具调用失败，检查参数是否正确
+
+---
+
+## 📚 技术文档
+
+以下是完整的工具列表和技术文档，供高级用户参考。
 
 ## 目录
 
@@ -1422,6 +1689,78 @@ version: 2.1.0
 ```json
 {}
 ```
+
+---
+
+---
+
+## 🎯 实际使用场景示例
+
+以下是一些实际的使用场景，展示如何用自然语言与我交互来完成任务。
+
+### 场景 1：查看网页内容
+**你说：** "帮我看看 example.com 上有什么"
+
+**我会做：**
+1. 启动浏览器
+2. 访问 example.com
+3. 提取页面标题和主要内容
+4. 总结并告诉你
+
+### 场景 2：搜索信息
+**你说：** "在百度搜索 'OpenClaw 使用教程'"
+
+**我会做：**
+1. 启动浏览器
+2. 访问百度
+3. 在搜索框输入关键词
+4. 点击搜索按钮
+5. 提取搜索结果
+
+### 场景 3：提取数据
+**你说：** "从 news.ycombinator.com 提取前10条新闻标题"
+
+**我会做：**
+1. 访问 Hacker News
+2. 定位新闻列表
+3. 提取标题和链接
+4. 整理成列表返回给你
+
+### 场景 4：网页截图
+**你说：** "帮我截取 github.com 首页的截图"
+
+**我会做：**
+1. 访问 GitHub
+2. 等待页面加载完成
+3. 截取整页截图
+4. 保存并告诉你文件位置
+
+### 场景 5：表单操作
+**你说：** "帮我在这个登录页面输入用户名和密码"
+
+**我会做：**
+1. 找到用户名输入框
+2. 填写用户名
+3. 找到密码输入框
+4. 填写密码
+5. 询问是否需要点击登录按钮
+
+### 场景 6：监控网页变化
+**你说：** "每隔5分钟检查一次这个网页的价格"
+
+**我会做：**
+1. 定期访问网页
+2. 提取价格信息
+3. 与上次对比
+4. 如有变化立即通知你
+
+---
+
+## 📖 技术文档：工具列表
+
+以下是完整的 101 个工具的详细文档，供高级用户和开发者参考。
+
+**注意：** 作为普通用户，你不需要了解这些技术细节。直接用自然语言告诉我你的需求即可。
 
 ---
 

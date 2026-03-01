@@ -322,6 +322,17 @@ echo -e "  ${NC}3. 测试：'使用 Playwright Browser Skill 启动浏览器并�
 echo -e "  ${NC}4. 查看 MCP 服务器状态（应显示 playwright-browser）${NC}"
 echo ""
 
+echo -e "${YELLOW}⚠️ 配置提示：${NC}"
+echo -e "  ${NC}如果 OpenClaw 无法识别技能，可能是 openclaw.json 中有旧配置${NC}"
+echo -e "  ${NC}解决方法：${NC}"
+echo -e "  ${GRAY}1. 打开 ~/.openclaw/openclaw.json${NC}"
+echo -e "  ${GRAY}2. 查找 'playwright-browser' 配置${NC}"
+echo -e "  ${GRAY}3. 确保路径正确（不包含 'backup' 字样）${NC}"
+echo -e "  ${GRAY}4. 或删除该配置，让 OpenClaw 使用 mcp.json${NC}"
+echo ""
+echo -e "  ${CYAN}详细说明请查看：OPENCLAW_MCP_GUIDE.md${NC}"
+echo ""
+
 echo -e "${CYAN}使用说明：${NC}"
 echo -e "${GRAY}  默认部署：  ./auto-deploy.sh${NC}"
 echo -e "${GRAY}  跳过构建：  ./auto-deploy.sh --skip-build${NC}"
