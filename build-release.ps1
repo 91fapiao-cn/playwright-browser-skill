@@ -57,9 +57,33 @@ Copy-Item "node_modules" -Destination "$ReleaseDir\node_modules" -Recurse
 New-Item -ItemType Directory -Path "$ReleaseDir\skill-package\skills" -Force | Out-Null
 Copy-Item "skill-package\skills\SKILL.md" -Destination "$ReleaseDir\skill-package\skills\"
 
-# 复制配置示例
+# 生成配置示例 (使用相对路径)
 New-Item -ItemType Directory -Path "$ReleaseDir\skill-package\settings" -Force | Out-Null
-Copy-Item "skill-package\settings\mcp.json" -Destination "$ReleaseDir\skill-package\settings\"
+
+# 动态生成 mcp.json,使用相对路径
+$mcpConfig = @{
+    mcpServers = @{
+        "playwright-browser" = @{
+            command = "node"
+            args = @("../../dist/mcp-server.js")  # 相对于 settings 目录的路径
+            env = @{}
+            disabled = $false
+            autoApprove = @(
+                "browser_launch",
+                "browser_goto",
+                "browser_get_title",
+                "browser_get_text",
+                "browser_get_html",
+                "browser_get_links",
+                "browser_get_cookies",
+                "browser_close"
+            )
+        }
+    }
+}
+
+$mcpConfig | ConvertTo-Json -Depth 10 | Set-Content "$ReleaseDir\skill-package\settings\mcp.json" -Encoding UTF8
+Write-Host "    - 生成 mcp.json (使用相对路径)" -ForegroundColor Gray
 
 # 4. 复制文档
 Write-Host "[4/7] 复制文档文件..." -ForegroundColor Yellow

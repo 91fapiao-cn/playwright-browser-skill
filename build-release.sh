@@ -53,9 +53,34 @@ cp -r node_modules "$RELEASE_DIR/"
 mkdir -p "$RELEASE_DIR/skill-package/skills"
 cp skill-package/skills/SKILL.md "$RELEASE_DIR/skill-package/skills/"
 
-# 复制配置示例
+# 生成配置示例 (使用相对路径)
 mkdir -p "$RELEASE_DIR/skill-package/settings"
-cp skill-package/settings/mcp.json "$RELEASE_DIR/skill-package/settings/"
+
+# 动态生成 mcp.json,使用相对路径
+cat > "$RELEASE_DIR/skill-package/settings/mcp.json" << 'EOF'
+{
+  "mcpServers": {
+    "playwright-browser": {
+      "command": "node",
+      "args": ["../../dist/mcp-server.js"],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [
+        "browser_launch",
+        "browser_goto",
+        "browser_get_title",
+        "browser_get_text",
+        "browser_get_html",
+        "browser_get_links",
+        "browser_get_cookies",
+        "browser_close"
+      ]
+    }
+  }
+}
+EOF
+
+echo "    - 生成 mcp.json (使用相对路径)"
 
 # 4. 复制文档
 echo "[4/7] 复制文档文件..."
